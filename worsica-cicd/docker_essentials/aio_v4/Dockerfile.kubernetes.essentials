@@ -1,0 +1,46 @@
+#PARENT
+FROM fedora:32
+MAINTAINER Ricardo Martins <rjmartins@lnec.pt>
+
+ENV LD_LIBRARY_PATH /usr/lib:/usr/local/lib:/usr/local/lib64
+ENV HOME /usr/local
+ENV PYTHON_VERSION 3.6.3
+ENV PYTHONIOENCODING UTF-8
+ENV GDAL_VERSION 3.0.4    
+#ENV PROJ_VERSION 6.3.2 
+#ENV GEOS_VERSION 3.8.1
+ENV OPENCV_VERSION 4.0.0.21
+ENV SNAP_VERSION 6
+ENV GUNICORN_VERSION 20.0.4
+
+ENV DJANGO_REQUEST_VERSION 1.5.6 #user statistics
+ENV SCIKIT_IMAGE_VERSION 0.17.2
+
+ENV DJANGO_VERSION 2.2.13 #1.11.29
+ENV SENTINELSAT_VERSION 0.13 #0.12.2
+ENV NUMPY_VERSION 1.15.2
+
+#Install packages inside venv
+#python needs to be installed since its not installed from the main core to make it smaller
+#epel-release is not needed since fedora already includes them, epel-release is only for rhel and centos
+
+RUN yum update -y \
+    && yum install -y python make zlib-devel bzip2-devel openssl-devel readline-devel ncurses-devel sqlite-devel gdbm-devel db4-devel expat-devel libpcap-devel xz-devel pcre-devel libffi-devel gcc libXext libSM libXrender findutils less procps htop net-tools iputils unzip zip nmap\
+#Install Python Virtual Environment (venv)
+    && cd $HOME \
+    && curl -kL https://raw.githubusercontent.com/saghul/pythonz/master/pythonz-install | bash \
+    && $HOME/pythonz/bin/pythonz install ${PYTHON_VERSION} \
+    && $HOME/pythonz/pythons/CPython-${PYTHON_VERSION}/bin/python -m venv worsica_web-py363_venv \
+    && echo -e " \
+        numpy==${NUMPY_VERSION} \n\
+	gunicorn==${GUNICORN_VERSION} \n\
+        sentinelsat==${SENTINELSAT_VERSION} \n\
+	tox " >> requirements-essential-pip.txt \
+    && $HOME/worsica_web-py363_venv/bin/pip3 install --upgrade pip \
+    && $HOME/worsica_web-py363_venv/bin/pip3 install --no-cache-dir -r requirements-essential-pip.txt \
+
+#Cleanup time
+    && yum clean all --enablerepo='*' \
+    && rm -rf /var/tmp/* \
+    && rm -rf /var/cache/* \
+    && rm -rf ~/.cache/*

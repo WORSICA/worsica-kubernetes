@@ -1,0 +1,107 @@
+version: "3.5"
+
+services:
+
+  intermediate:
+    image: "worsica/worsica-intermediate:development"
+    container_name: "intermediate"
+    hostname: "intermediate"
+    #volumes:
+    #  - /home/centos/worsica_web_intermediate:/usr/local/worsica_web_intermediate
+    #  - /home/centos/worsica_web_products:/usr/local/worsica_web_products
+    #  - /dev/log:/dev/log
+    #  - /etc/hosts:/etc/hosts
+    entrypoint: "/bin/bash"
+    command: "/usr/local/worsica_web_intermediate/worsica_runserver.sh"
+    depends_on:
+      - postgis
+      - rabbitmq
+      - nextcloud
+    networks:
+      - worsica
+    ports:
+      - "8002:8002"
+
+  frontend:
+    image: "worsica/worsica-frontend:development"
+    container_name: "frontend"
+    hostname: "frontend"
+    #volumes:
+    #  - /home/centos/worsica_web:/usr/local/worsica_web
+    #  - /dev/log:/dev/log
+    #  - /etc/hosts:/etc/hosts
+    entrypoint: "/bin/bash"
+    command: "/usr/local/worsica_web/worsica_runserver.sh"
+    depends_on:
+      - postgis
+      - intermediate
+    networks:
+      - worsica
+    ports:
+      - "8001:8001"
+
+  nextcloud:
+    image: "nextcloud:frontend"
+    container_name: "nextcloud"
+    hostname: "nextcloud"
+    networks:
+      - worsica
+    #environment:
+    #  - "NEXTCLOUD_TRUSTED_DOMAINS='localhost:8080','nextcloud'"
+    #  - "NEXTCLOUD_ADMIN_USER=${WORSICA_NEXTCLOUD_USER}"
+    #  - "NEXTCLOUD_ADMIN_PASSWORD=${WORSICA_NEXTCLOUD_PASSWORD}"
+    volumes:
+      - "nextcloud_data:/var/www/html"
+    ports:
+      - "8080:80"
+    restart: "on-failure:5"
+
+  postgis:
+    image: "mdillon/postgis:9.6"
+    hostname: "worsica-backend"
+    container_name: "postgis"
+    #volumes:
+    #  - "/database/data96:/var/lib/postgresql/data:rw"
+    ports:
+      - "5432:5432"
+    environment:
+      - "POSTGRES_PASSWORD=2CqdqDSGpE8EEvdx"
+      - "LANG=en_US.utf8"
+      - "PGDATA=/var/lib/postgresql/data"
+    restart: "on-failure:5"
+    networks:
+      - worsica
+
+  rabbitmq:
+    image: "rabbitmq:3.7-management"
+    hostname: "worsica-backend"
+    container_name: "rabbitmq"
+    #volumes:
+    #  - "/rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit"
+    ports:
+      - "8088:15672"
+      - "5672:5672"
+    environment:
+      - "RABBITMQ_SSL_CACERTFILE"
+      - "RABBITMQ_SSL_CERTFILE"
+      - "RABBITMQ_SSL_DEPTH"
+      - "RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT"
+      - "RABBITMQ_SSL_KEYFILE"
+      - "RABBITMQ_SSL_VERIFY"
+      - "RABBITMQ_DEFAULT_VHOST=corsica_vhost"
+      - "RABBITMQ_DEFAULT_USER=rabbitmq-corsica"
+      - "RABBITMQ_DEFAULT_PASS=wn7xNNpK8uRnFQvh"
+    restart: "on-failure:5"
+    networks:
+      - worsica
+
+networks:
+  worsica:
+    ipam:    
+      driver: default
+
+#volumes:
+#  nextcloud_data:
+#    external:
+#      name: cf29964a8d2ed34772173a2869ca25402a700f905196553b3261f2537252bc55
+
