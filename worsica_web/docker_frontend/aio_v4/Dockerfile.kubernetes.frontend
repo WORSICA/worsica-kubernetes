@@ -1,5 +1,5 @@
 #DOCKER FRONTEND
-FROM worsica/worsica-essentials:development
+FROM worsica/worsica-kubernetes-essentials:development
 MAINTAINER Ricardo Martins <rjmartins@lnec.pt>
 
 ENV PSYCOPG_VERSION 2.8.5 #2.8.4
@@ -31,7 +31,7 @@ RUN cd $HOME \
     && rm -rf /var/cache/* \
     && rm -rf ~/.cache/*
 
-#git clone
+#git clone portal
 RUN cd $HOME \
     && wget https://github.com/WORSICA/worsica-frontend/archive/refs/heads/development.zip \
     && unzip development.zip \

@@ -1,5 +1,5 @@
 #DOCKER INTERMEDIATE
-FROM worsica/worsica-essentials:development
+FROM worsica/worsica-kubernetes-essentials:development
 MAINTAINER Ricardo Martins <rjmartins@lnec.pt>
 
 RUN cd $HOME \
@@ -44,11 +44,16 @@ RUN cd $HOME \
     && rm -rf /var/cache/* \
     && rm -rf ~/.cache/*
 
-#git clone
+#git clone intermediate
 RUN cd $HOME \
     && wget https://github.com/WORSICA/worsica-intermediate/archive/refs/heads/development.zip \
     && unzip development.zip \
     && mv worsica-intermediate-development worsica_web_intermediate
+#git clone processing
+RUN cd $HOME \
+    && wget https://github.com/WORSICA/worsica-processing/archive/refs/heads/development.zip \
+    && unzip development.zip \
+    && mv worsica-processing-development worsica_web_products
 
 #set the path enviroment variable and the cwd
 ENV PATH /usr/local/worsica_web-py363_venv/bin:${PATH}

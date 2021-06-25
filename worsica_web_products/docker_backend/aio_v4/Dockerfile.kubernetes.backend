@@ -1,5 +1,5 @@
 #DOCKER BACKEND
-FROM worsica/worsica-essentials:development
+FROM worsica/worsica-kubernetes-essentials:development
 MAINTAINER Ricardo Martins <rjmartins@lnec.pt>
 #build manually requirements file instead of importing it from the host or from git repository.
 
@@ -35,7 +35,7 @@ RUN cd $HOME \
     && rm -rf /var/cache/* \
     && rm -rf ~/.cache/*
 
-#git clone
+#git clone processing
 RUN cd $HOME \
     && wget https://github.com/WORSICA/worsica-processing/archive/refs/heads/development.zip \
     && unzip development.zip \

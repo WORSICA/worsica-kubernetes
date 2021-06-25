@@ -2,9 +2,9 @@ version: "3.5"
 
 services:
 
-  intermediate:
-    image: "worsica/worsica-intermediate:development"
-    container_name: "intermediate"
+  kubernetes-intermediate:
+    image: "worsica/worsica-kubernetes-intermediate:development"
+    container_name: "kubernetes-intermediate"
     hostname: "intermediate"
     #volumes:
     #  - /home/centos/worsica_web_intermediate:/usr/local/worsica_web_intermediate
@@ -22,9 +22,9 @@ services:
     ports:
       - "8002:8002"
 
-  frontend:
-    image: "worsica/worsica-frontend:development"
-    container_name: "frontend"
+  kubernetes-frontend:
+    image: "worsica/worsica-kubernetes-frontend:development"
+    container_name: "kubernetes-frontend"
     hostname: "frontend"
     #volumes:
     #  - /home/centos/worsica_web:/usr/local/worsica_web
@@ -34,7 +34,7 @@ services:
     command: "/usr/local/worsica_web/worsica_runserver.sh"
     depends_on:
       - postgis
-      - intermediate
+      - kubernetes-intermediate
     networks:
       - worsica
     ports:
