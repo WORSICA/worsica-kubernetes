@@ -74,62 +74,62 @@ else
 fi
 
 
-echo '------------------------------------'
-echo '6) Stop worsica-kubernetes-frontend docker and worsica-kubernetes-intermediate docker'
-if docker stop kubernetes-frontend ; then
-	echo 'Stop worsica-kubernetes-frontend docker: Success!'
-	cd $CURRENT_PATH
-else
-	echo 'Stop worsica-kubernetes-frontend docker: Fail!'
-	cd $CURRENT_PATH
-	#exit 1
-fi
-if docker stop kubernetes-intermediate ; then
-	echo 'Stop worsica-kubernetes-intermediate docker: Success!'
-	cd $CURRENT_PATH
-else
-	echo 'Stop worsica-kubernetes-intermediate docker: Fail!'
-	cd $CURRENT_PATH
-	#exit 1
-fi
+#echo '------------------------------------'
+#echo '6) Stop worsica-kubernetes-frontend docker and worsica-kubernetes-intermediate docker'
+#if docker stop kubernetes-frontend ; then
+#	echo 'Stop worsica-kubernetes-frontend docker: Success!'
+#	cd $CURRENT_PATH
+#else
+#	echo 'Stop worsica-kubernetes-frontend docker: Fail!'
+#	cd $CURRENT_PATH
+#	#exit 1
+#fi
+#if docker stop kubernetes-intermediate ; then
+#	echo 'Stop worsica-kubernetes-intermediate docker: Success!'
+#	cd $CURRENT_PATH
+#else
+#	echo 'Stop worsica-kubernetes-intermediate docker: Fail!'
+#	cd $CURRENT_PATH
+#	#exit 1
+#fi
 
-echo '------------------------------------'
-echo '7) Docker instances cleanup and image cleanup'
-if docker rm $(docker ps -a -q) ; then
-	echo 'Docker image cleanup: Success!'
-	cd $CURRENT_PATH
-else
-	echo 'Docker image cleanup: Fail!'
-	cd $CURRENT_PATH
-	#exit 1
-fi
-if docker rmi $(docker images -f 'dangling=true' -q) ; then
-	echo 'Docker image cleanup: Success!'
-	cd $CURRENT_PATH
-else
-	echo 'Docker image cleanup: Fail!'
-	cd $CURRENT_PATH
-	#exit 1
-fi
+#echo '------------------------------------'
+#echo '7) Docker instances cleanup and image cleanup'
+#if docker rm $(docker ps -a -q) ; then
+#	echo 'Docker image cleanup: Success!'
+#	cd $CURRENT_PATH
+#else
+#	echo 'Docker image cleanup: Fail!'
+#	cd $CURRENT_PATH
+#	#exit 1
+#fi
+#if docker rmi $(docker images -f 'dangling=true' -q) ; then
+#	echo 'Docker image cleanup: Success!'
+#	cd $CURRENT_PATH
+#else
+#	echo 'Docker image cleanup: Fail!'
+#	cd $CURRENT_PATH
+#	#exit 1
+#fi
 
-echo '------------------------------------'
-echo '8) Run worsica-kubernetes-intermediate and run worsica-kubernetes-frontend'
-if docker-compose -f backend/backend.yml up -d kubernetes-intermediate ; then
-	echo 'Run worsica-kubernetes-intermediate: Success!'
-	cd $CURRENT_PATH
-else
-	echo 'Run worsica-kubernetes-intermediate: Fail!'
-	cd $CURRENT_PATH
-	#exit 1
-fi
-if docker-compose -f backend/backend.yml up -d kubernetes-frontend ; then
-	echo 'Run worsica-kubernetes-frontend: Success!'
-	cd $CURRENT_PATH
-else
-	echo 'Run worsica-kubernetes-frontend: Fail!'
-	cd $CURRENT_PATH
-	#exit 1
-fi
+#echo '------------------------------------'
+#echo '8) Run worsica-kubernetes-intermediate and run worsica-kubernetes-frontend'
+#if docker-compose -f backend/backend.yml up -d kubernetes-intermediate ; then
+#	echo 'Run worsica-kubernetes-intermediate: Success!'
+#	cd $CURRENT_PATH
+#else
+#	echo 'Run worsica-kubernetes-intermediate: Fail!'
+#	cd $CURRENT_PATH
+#	#exit 1
+#fi
+#if docker-compose -f backend/backend.yml up -d kubernetes-frontend ; then
+#	echo 'Run worsica-kubernetes-frontend: Success!'
+#	cd $CURRENT_PATH
+#else
+#	echo 'Run worsica-kubernetes-frontend: Fail!'
+#	cd $CURRENT_PATH
+#	#exit 1
+#fi
 
 #if docker run -d --network worsica --network-alias intermediate --name intermediate -v /home/centos/worsica_web_intermediate:/usr/local/worsica_web_intermediate -v /etc/hosts:/etc/hosts -v /home/centos/worsica_web_products:/usr/local/worsica_web_products -v /dev/log:/dev/log -p 127.0.0.1:8002:8002 --entrypoint '/bin/bash' worsica/worsica-intermediate:development /usr/local/worsica_web_intermediate/worsica_runserver.sh ; then
 #	echo 'Run worsica-intermediate: Success!'
