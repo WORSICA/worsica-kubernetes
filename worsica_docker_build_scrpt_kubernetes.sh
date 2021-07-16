@@ -74,35 +74,35 @@ else
 	exit 1
 fi
 
-echo '------------------------------------'
-echo '5) do docker copy'
-echo '5.1) worsica-frontend'
-if docker cp $HOME/worsica/worsica-frontend worsica/worsica-kubernetes-frontend:development:/usr/local/worsica_web ; then
-	echo 'Copying worsica-frontend to docker frontend: Success!'
-	cd $CURRENT_PATH
-else
-	echo 'Copying worsica-frontend to docker frontend: Fail!'
-	cd $CURRENT_PATH
-	exit 1
-fi
-echo '5.2) worsica-intermediate'
-if docker cp $HOME/worsica/worsica-intermediate worsica/worsica-kubernetes-intermediate:development:/usr/local/worsica_web_intermediate ; then
-	echo 'Copying worsica-intermediate to docker intermediate: Success!'
-	cd $CURRENT_PATH
-else
-	echo 'Copying worsica-intermediate to docker intermediate: Fail!'
-	cd $CURRENT_PATH
-	exit 1
-fi
-echo '5.3) worsica-processing'
-if docker cp $HOME/worsica/worsica-processing worsica/worsica-kubernetes-intermediate:development:/usr/local/worsica_web_products ; then
-	echo 'Copying worsica-processing to docker intermediate: Success!'
-	cd $CURRENT_PATH
-else
-	echo 'Copying worsica-processing to docker intermediate: Fail!'
-	cd $CURRENT_PATH
-	exit 1
-fi
+# echo '------------------------------------'
+# echo '5) do docker copy'
+# echo '5.1) worsica-frontend'
+# if docker cp $HOME/worsica/worsica-frontend worsica/worsica-kubernetes-frontend:development:/usr/local/worsica_web ; then
+# 	echo 'Copying worsica-frontend to docker frontend: Success!'
+# 	cd $CURRENT_PATH
+# else
+# 	echo 'Copying worsica-frontend to docker frontend: Fail!'
+# 	cd $CURRENT_PATH
+# 	exit 1
+# fi
+# echo '5.2) worsica-intermediate'
+# if docker cp $HOME/worsica/worsica-intermediate worsica/worsica-kubernetes-intermediate:development:/usr/local/worsica_web_intermediate ; then
+# 	echo 'Copying worsica-intermediate to docker intermediate: Success!'
+# 	cd $CURRENT_PATH
+# else
+# 	echo 'Copying worsica-intermediate to docker intermediate: Fail!'
+# 	cd $CURRENT_PATH
+# 	exit 1
+# fi
+# echo '5.3) worsica-processing'
+# if docker cp $HOME/worsica/worsica-processing worsica/worsica-kubernetes-intermediate:development:/usr/local/worsica_web_products ; then
+# 	echo 'Copying worsica-processing to docker intermediate: Success!'
+# 	cd $CURRENT_PATH
+# else
+# 	echo 'Copying worsica-processing to docker intermediate: Fail!'
+# 	cd $CURRENT_PATH
+# 	exit 1
+# fi
 
 #echo '------------------------------------'
 #echo '6) Stop worsica-kubernetes-frontend docker and worsica-kubernetes-intermediate docker'
