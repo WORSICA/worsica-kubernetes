@@ -10,6 +10,17 @@ In this version:
 To do:
 - Translating docker commands to kubectl?
 
+Cheat sheet:
+VM0 - Master
+VM1 - worsica-frontend
+VM2 - worsica-intermediate + nextcloud
+VM3 - postgis
+VM4 - rabbitmq
+
 Installation:
-- Git clone or download this repository to somewhere.
-- Run worsica_docker_build_scrpt_kubernetes.sh (as sudo), it will start building the essentials, then each component of WORSICA.
+1- On VM master, git clone this repository, then worsica-frontend, worsica-intermediate, worsica-processing
+2- Run worsica_docker_build_scrpt_kubernetes.sh (as sudo), it will start building the essentials, then each component of WORSICA.
+
+Update:
+- If you have changed the files from the worsica-frontend/worsica-intermediate/worsica-processing services, you need to do "git pull" on their respective VM. 
+- If you have changed any dockerfiles on worsica-kubernetes, you must build again.

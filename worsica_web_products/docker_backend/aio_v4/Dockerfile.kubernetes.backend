@@ -36,10 +36,10 @@ RUN cd $HOME \
     && rm -rf ~/.cache/*
 
 #git clone processing
-RUN cd $HOME \
-    && wget https://github.com/WORSICA/worsica-processing/archive/refs/heads/development.zip \
-    && unzip development.zip \
-    && mv worsica-processing-development worsica_web_products
+#RUN cd $HOME \
+#    && wget https://github.com/WORSICA/worsica-processing/archive/refs/heads/development.zip \
+#    && unzip development.zip \
+#    && mv worsica-processing-development worsica_web_products
 
 #set the path enviroment variable and the cwd
 ENV PATH /usr/local/worsica_web-py363_venv/bin:${PATH}

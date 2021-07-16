@@ -33,11 +33,11 @@ RUN cd $HOME \
 #    && $HOME/snap/bin/snap --nosplash --nogui --modules --update-all \
 #    && rm -rf /tmp/snap-*/* && rm -rf $HOME/.snap/var/cache/* \
 #Install dependencies to run functional tests (browsers)
-    && yum install -y firefox \
-    && cd /var/tmp \
-    && curl -O https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm \
-    && yum install -y google-chrome-stable_current_x86_64.rpm \
-    && rm -rf google-chrome-stable_current_x86_64.rpm \
+#    && yum install -y firefox \
+#    && cd /var/tmp \
+#    && curl -O https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm \
+#    && yum install -y google-chrome-stable_current_x86_64.rpm \
+#    && rm -rf google-chrome-stable_current_x86_64.rpm \
 #Cleanup time
     && yum clean all --enablerepo='*' \
     && rm -rf /var/tmp/* \
@@ -45,15 +45,15 @@ RUN cd $HOME \
     && rm -rf ~/.cache/*
 
 #git clone intermediate
-RUN cd $HOME \
-    && wget https://github.com/WORSICA/worsica-intermediate/archive/refs/heads/development.zip \
-    && unzip development.zip \
-    && mv worsica-intermediate-development worsica_web_intermediate
+#RUN cd $HOME \
+#    && wget https://github.com/WORSICA/worsica-intermediate/archive/refs/heads/development.zip \
+#    && unzip development.zip \
+#    && mv worsica-intermediate-development worsica_web_intermediate
 #git clone processing
-RUN cd $HOME \
-    && wget https://github.com/WORSICA/worsica-processing/archive/refs/heads/development.zip \
-    && unzip development.zip \
-    && mv worsica-processing-development worsica_web_products
+#RUN cd $HOME \
+#    && wget https://github.com/WORSICA/worsica-processing/archive/refs/heads/development.zip \
+#    && unzip development.zip \
+#    && mv worsica-processing-development worsica_web_products
 
 #set the path enviroment variable and the cwd
 ENV PATH /usr/local/worsica_web-py363_venv/bin:${PATH}
