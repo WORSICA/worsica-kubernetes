@@ -37,7 +37,7 @@ RUN cd $HOME \
 #    && unzip development.zip \
 #    && mv worsica-frontend-development worsica_web
 
-COPY /opt/cloudadm/worsica/worsica-frontend /usr/local/worsica_web
+COPY /repositories/worsica-frontend /usr/local/worsica_web
 
 #set the path enviroment variable and the cwd
 ENV PATH /usr/local/worsica_web-py363_venv/bin:${PATH}

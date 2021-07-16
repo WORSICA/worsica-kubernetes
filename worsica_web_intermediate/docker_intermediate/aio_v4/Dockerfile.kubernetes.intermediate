@@ -55,8 +55,8 @@ RUN cd $HOME \
 #    && unzip development.zip \
 #    && mv worsica-processing-development worsica_web_products
 
-COPY /opt/cloudadm/worsica/worsica-intermediate /usr/local/worsica_web_intermediate
-COPY /opt/cloudadm/worsica/worsica-processing /usr/local/worsica_web_products
+COPY /repositories/worsica-intermediate /usr/local/worsica_web_intermediate
+COPY /repositories/worsica-processing /usr/local/worsica_web_products
 
 #set the path enviroment variable and the cwd
 ENV PATH /usr/local/worsica_web-py363_venv/bin:${PATH}
