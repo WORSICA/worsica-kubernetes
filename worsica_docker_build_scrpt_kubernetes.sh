@@ -48,7 +48,7 @@ else
 	cd $CURRENT_PATH
 	exit 1
 fi
-cd $CURRENT_PATH
+#cd $CURRENT_PATH
 if docker build -t worsica/worsica-kubernetes-frontend:development -f $CURRENT_PATH/worsica_web/docker_frontend/aio_v4/Dockerfile.kubernetes.frontend . ; then
 	echo 'Building worsica-kubernetes-frontend: Success!'
 	cd $CURRENT_PATH
@@ -69,7 +69,7 @@ else
 	cd $CURRENT_PATH
 	exit 1
 fi
-cd $CURRENT_PATH 
+#cd $CURRENT_PATH 
 if docker build -t worsica/worsica-kubernetes-intermediate:development -f $CURRENT_PATH/worsica_web_intermediate/docker_intermediate/aio_v4/Dockerfile.kubernetes.intermediate . ; then
 	echo 'Building worsica-kubernetes-intermediate: Success!'
 	cd $CURRENT_PATH
