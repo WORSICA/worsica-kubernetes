@@ -1,10 +1,5 @@
 source ./worsica_kubernetes_common.sh
 
-if [[ $EUID -ne 0 ]] ; then
-	echo "Uh-uh, no way! This script must be run as root."
-	exit 1
-fi
-
 CURRENT_PATH=$HOME/worsica/worsica-kubernetes
 echo $CURRENT_PATH
 CURRENT_BRANCH=development
@@ -42,17 +37,10 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'essentials' ]]); th
 		echo 'git pull success! --------------'
 		cd $CURRENT_PATH
 		echo '2) build with no-cache --------------'
-		if (build_worsica_essentials $CURRENT_PATH $NO_CACHE_FLAG); then
+		FUNC=$(declare -f build_worsica_essentials) #force sudo
+                if (sudo bash -c "$FUNC; build_worsica_essentials $CURRENT_PATH $NO_CACHE_FLAG"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
-			echo '3) kompose --------------'
-			if (kompose convert --controller "deployment" -f ./backend/backend.yml); then
-				echo 'kompose success! --------------'
-				cd $CURRENT_PATH
-			else
-				echo 'kompose fail! --------------'
-				cd $CURRENT_PATH
-			fi
 		else
 			echo 'build fail! --------------'
 			cd $CURRENT_PATH
@@ -69,7 +57,8 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'frontend' ]]); then
 		echo 'git pull success! --------------'
 		cd $CURRENT_PATH
 		echo '2) build --------------'
-		if (build_worsica_frontend $CURRENT_PATH); then
+		FUNC=$(declare -f build_worsica_frontend) #force sudo
+                if (sudo bash -c "$FUNC; build_worsica_frontend $CURRENT_PATH"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
 		else
@@ -88,7 +77,8 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); 
 		echo 'git pull success! --------------'
 		cd $CURRENT_PATH
 		echo '2) build --------------'
-		if (build_worsica_intermediate $CURRENT_PATH); then
+		FUNC=$(declare -f build_worsica_intermediate) #force sudo
+                if (sudo bash -c "$FUNC; build_worsica_intermediate $CURRENT_PATH"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
 		else
