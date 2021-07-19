@@ -1,59 +1,6 @@
 #DOCKER INTERMEDIATE
-FROM worsica/worsica-kubernetes-essentials:development
+FROM worsica/worsica-intermediate:development
 MAINTAINER Ricardo Martins <rjmartins@lnec.pt>
-
-RUN cd $HOME \
-#Install GDAL for geodjango on portal and binaries for processing
-#GDAL from fedora repository and directly from pip with no compilation
-#Stick to only install a version of GDAL, to avoid problems with updates
-#Numpy from pip requirements must be installed first before gdal (import error no module named _gdal_array)
-    && yum install -y gdal-${GDAL_VERSION} gdal-devel-${GDAL_VERSION} gcc-c++ gzip which\
-#build manually requirements file instead of importing it from the host or from git repository.
-    && echo -e " \
-        celery==4.1.1  \n\
-        Django==${DJANGO_VERSION} \n\
-        psycopg2-binary==2.8.4 \n\
-	django-raster==0.8 \n\
-        opencv-python==${OPENCV_VERSION} \n\
-        GDAL==${GDAL_VERSION} \n\
-	django-request==${DJANGO_REQUEST_VERSION} \n\
-	google-cloud-storage==1.37.1 \n\
-	scikit-image==${SCIKIT_IMAGE_VERSION}" >> requirements-interm-pip.txt \
-    && $HOME/worsica_web-py363_venv/bin/pip3 install --no-cache-dir -r requirements-interm-pip.txt \
-    && mkdir worsica_web_intermediate \
-    && mkdir worsica_web_products \
-
-#ESA SNAP 6.0
-#Derived from https://github.com/schwankner/docker-esa-snap/blob/eb68fb3a4dd33e6e6e74c35679665f759063590b/Dockerfile
-#    && cd $HOME \
-#    && curl -O http://step.esa.int/downloads/${SNAP_VERSION}.0/installers/esa-snap_sentinel_unix_${SNAP_VERSION}_0.sh \
-#    && chmod +x $HOME/esa-snap_sentinel_unix_${SNAP_VERSION}_0.sh \
-#    && $HOME/esa-snap_sentinel_unix_${SNAP_VERSION}_0.sh -q \
-#    && rm -rf esa-snap_sentinel_unix_${SNAP_VERSION}_0.sh \
-#    && $HOME/snap/bin/snap --nosplash --nogui --modules --update-all \
-#    && rm -rf /tmp/snap-*/* && rm -rf $HOME/.snap/var/cache/* \
-#Install dependencies to run functional tests (browsers)
-#    && yum install -y firefox \
-#    && cd /var/tmp \
-#    && curl -O https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm \
-#    && yum install -y google-chrome-stable_current_x86_64.rpm \
-#    && rm -rf google-chrome-stable_current_x86_64.rpm \
-#Cleanup time
-    && yum clean all --enablerepo='*' \
-    && rm -rf /var/tmp/* \
-    && rm -rf /var/cache/* \
-    && rm -rf ~/.cache/*
-
-#git clone intermediate
-#RUN cd $HOME \
-#    && wget https://github.com/WORSICA/worsica-intermediate/archive/refs/heads/development.zip \
-#    && unzip development.zip \
-#    && mv worsica-intermediate-development worsica_web_intermediate
-#git clone processing
-#RUN cd $HOME \
-#    && wget https://github.com/WORSICA/worsica-processing/archive/refs/heads/development.zip \
-#    && unzip development.zip \
-#    && mv worsica-processing-development worsica_web_products
 
 COPY /repositories/worsica-intermediate /usr/local/worsica_web_intermediate
 COPY /repositories/worsica-processing /usr/local/worsica_web_products

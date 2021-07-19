@@ -1,45 +1,8 @@
 #DOCKER BACKEND
-FROM worsica/worsica-kubernetes-essentials:development
+FROM worsica/worsica-processing:development
 MAINTAINER Ricardo Martins <rjmartins@lnec.pt>
-#build manually requirements file instead of importing it from the host or from git repository.
 
-RUN cd $HOME \
-
-#OpenCV 4
-#Note: Change this in the future to be compiled from the source (to use CUDA)
-#....
-#Install GDAL for geodjango on portal and binaries for processing
-#GDAL from fedora repository and directly from pip with no compilation
-#Stick to only install a version of GDAL, to avoid problems with updates
-#Numpy from pip requirements must be installed first before gdal (import error no module named _gdal_array)
-    && yum install -y gdal-${GDAL_VERSION} gdal-devel-${GDAL_VERSION} gcc-c++ gzip which \
-    && echo -e " \
-       opencv-python==${OPENCV_VERSION} \n\
-       GDAL==${GDAL_VERSION} \n\
-       google-cloud-storage==1.37.1 \n\
-       scikit-image==${SCIKIT_IMAGE_VERSION}" >> requirements-backend-pip.txt \
-    && $HOME/worsica_web-py363_venv/bin/pip3 install --no-cache-dir -r requirements-backend-pip.txt \
-
-#ESA SNAP 6.0
-#Derived from https://github.com/schwankner/docker-esa-snap/blob/eb68fb3a4dd33e6e6e74c35679665f759063590b/Dockerfile
-#    && cd $HOME \
-#    && curl -O http://step.esa.int/downloads/${SNAP_VERSION}.0/installers/esa-snap_sentinel_unix_${SNAP_VERSION}_0.sh \
-#    && chmod +x $HOME/esa-snap_sentinel_unix_${SNAP_VERSION}_0.sh \
-#    && $HOME/esa-snap_sentinel_unix_${SNAP_VERSION}_0.sh -q \
-#    && rm -rf esa-snap_sentinel_unix_${SNAP_VERSION}_0.sh \
-#    && $HOME/snap/bin/snap --nosplash --nogui --modules --update-all \
-#    && rm -rf /tmp/snap-*/* && rm -rf $HOME/.snap/var/cache/* \
-#Cleanup time
-    && yum clean all --enablerepo='*' \
-    && rm -rf /var/tmp/* \
-    && rm -rf /var/cache/* \
-    && rm -rf ~/.cache/*
-
-#git clone processing
-#RUN cd $HOME \
-#    && wget https://github.com/WORSICA/worsica-processing/archive/refs/heads/development.zip \
-#    && unzip development.zip \
-#    && mv worsica-processing-development worsica_web_products
+COPY /repositories/worsica-processing /usr/local/worsica_web_products
 
 #set the path enviroment variable and the cwd
 ENV PATH /usr/local/worsica_web-py363_venv/bin:${PATH}
