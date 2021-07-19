@@ -19,13 +19,21 @@ cd $CURRENT_PATH
 if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'essentials' ]]); then
 	echo ' ==========Update worsica-essentials  =========='
 	echo '1) git pull --------------'
-	if (cd $CURRENT_PATH/repositories/worsica-essentials && git pull -u origin $CURRENT_BRANCH); then
+	if (cd $CURRENT_PATH/repositories/worsica-cicd && git pull -u origin $CURRENT_BRANCH); then
 		echo 'git pull success! --------------'
 		cd $CURRENT_PATH
 		echo '2) build with no-cache --------------'
 		if (build_worsica_essentials $CURRENT_PATH $NO_CACHE_FLAG); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
+			echo '3) kompose --------------'
+			if (kompose convert --controller "deployment" -f ./backend/backend.yml); then
+				echo 'kompose success! --------------'
+				cd $CURRENT_PATH
+			else
+				echo 'kompose fail! --------------'
+				cd $CURRENT_PATH
+			fi
 		else
 			echo 'build fail! --------------'
 			cd $CURRENT_PATH
