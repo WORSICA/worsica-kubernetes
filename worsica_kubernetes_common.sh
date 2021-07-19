@@ -1,6 +1,6 @@
 function build_worsica_essentials {
-	CURRENT_PATH = $1
-	NO_CACHE = $2
+	CURRENT_PATH=$1
+	NO_CACHE=$2
 	cd $CURRENT_PATH
 	if [[ -z $NO_CACHE ]] ; then
 		echo 'Use cache on the build'
@@ -32,7 +32,7 @@ function build_worsica_essentials {
 }
 
 function build_worsica_frontend {
-	CURRENT_PATH = $1
+	CURRENT_PATH=$1
 	cd $CURRENT_PATH
 	if docker build -t worsica/worsica-frontend:development -f $CURRENT_PATH/repositories/worsica-frontend/docker_frontend/aio_v4/Dockerfile.frontend . ; then
 		echo 'Building worsica-frontend: Success!'
@@ -54,7 +54,7 @@ function build_worsica_frontend {
 }
 
 function build_worsica_intermediate {
-	CURRENT_PATH = $1
+	CURRENT_PATH=$1
 	cd $CURRENT_PATH
 	if docker build -t worsica/worsica-intermediate:development -f $CURRENT_PATH/repositories/worsica-intermediate/docker_intermediate/aio_v4/Dockerfile.intermediate . ; then
 		echo 'Building worsica-intermediate: Success!'
