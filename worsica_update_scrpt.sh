@@ -19,7 +19,7 @@ cd $CURRENT_PATH
 if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'essentials' ]]); then
 	echo ' ==========Update worsica-essentials  =========='
 	echo '1) git pull --------------'
-	if (cd $CURRENT_PATH/repositories/worsica-cicd && git pull -u origin $CURRENT_BRANCH); then
+	if (cd $CURRENT_PATH/repositories/worsica-cicd && git pull origin $CURRENT_BRANCH); then
 		echo 'git pull success! --------------'
 		cd $CURRENT_PATH
 		echo '2) build with no-cache --------------'
@@ -46,7 +46,7 @@ fi
 if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'frontend' ]]); then
 	echo ' ==========Update worsica-frontend =========='
 	echo '1) git pull --------------'
-	if (cd $CURRENT_PATH/repositories/worsica-frontend && git pull -u origin $CURRENT_BRANCH); then
+	if (cd $CURRENT_PATH/repositories/worsica-frontend && git pull origin $CURRENT_BRANCH); then
 		echo 'git pull success! --------------'
 		cd $CURRENT_PATH
 		echo '2) build --------------'
@@ -65,7 +65,7 @@ fi
 if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); then
 	echo ' ==========Update worsica-intermediate  =========='
 	echo '1) git pull --------------'
-	if (cd $CURRENT_PATH/repositories/worsica-intermediate && git pull -u origin $CURRENT_BRANCH); then
+	if (cd $CURRENT_PATH/repositories/worsica-intermediate && git pull origin $CURRENT_BRANCH); then
 		echo 'git pull success! --------------'
 		cd $CURRENT_PATH
 		echo '2) build --------------'
