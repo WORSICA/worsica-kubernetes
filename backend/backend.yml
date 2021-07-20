@@ -6,7 +6,8 @@ services:
     image: "worsica/worsica-kubernetes-intermediate:development"
     container_name: "kubernetes-intermediate"
     hostname: "intermediate"
-    #volumes:
+    volumes:
+       - "pvc_worsica_api_migrations:/usr/local/worsica_web_intermediate/worsica_api/migrations"
     #  - /home/centos/worsica_web_intermediate:/usr/local/worsica_web_intermediate
     #  - /home/centos/worsica_web_products:/usr/local/worsica_web_products
     #  - /dev/log:/dev/log
@@ -26,7 +27,8 @@ services:
     image: "worsica/worsica-kubernetes-frontend:development"
     container_name: "kubernetes-frontend"
     hostname: "frontend"
-    #volumes:
+    volumes:
+       - "pvc_worsica_portal_migrations:/usr/local/worsica_web/worsica_portal/migrations"
     #  - /home/centos/worsica_web:/usr/local/worsica_web
     #  - /dev/log:/dev/log
     #  - /etc/hosts:/etc/hosts
