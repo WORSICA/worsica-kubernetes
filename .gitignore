@@ -79,4 +79,5 @@ log/
 functional_tests_files/*/*
 repositories/*
 kustomization/*
+deploy/*.yaml
 
