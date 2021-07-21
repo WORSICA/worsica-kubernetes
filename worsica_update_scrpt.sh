@@ -41,7 +41,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'essentials' ]]); th
 		FUNC=$(declare -f build_worsica_essentials) #force sudo
                 if (sudo bash -c "$FUNC; build_worsica_essentials $CURRENT_PATH $NO_CACHE_FLAG"); then
 			echo 'build success! --------------'
-			cd $CURRENT_PATH
+			cd $CURRENT_PATH		
 		else
 			echo 'build fail! --------------'
 			cd $CURRENT_PATH
@@ -62,6 +62,13 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'frontend' ]]); then
                 if (sudo bash -c "$FUNC; build_worsica_frontend $CURRENT_PATH"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
+			if (sudo docker save worsica/worsica-kubernetes-frontend:development | ssh vnode-1 "sudo docker load"); then
+				echo 'deployment success! --------------'
+				cd $CURRENT_PATH
+			else
+				echo 'deployment fail! --------------'
+				cd $CURRENT_PATH
+			fi	
 		else
 			echo 'build fail! --------------'
 			cd $CURRENT_PATH
@@ -82,6 +89,13 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); 
                 if (sudo bash -c "$FUNC; build_worsica_intermediate $CURRENT_PATH"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
+			if (sudo docker save worsica/worsica-kubernetes-intermediate:development | ssh vnode-2 "sudo docker load"); then
+				echo 'deployment success! --------------'
+				cd $CURRENT_PATH
+			else
+				echo 'deployment fail! --------------'
+				cd $CURRENT_PATH
+			fi	
 		else
 			echo 'build fail! --------------'
 			cd $CURRENT_PATH
