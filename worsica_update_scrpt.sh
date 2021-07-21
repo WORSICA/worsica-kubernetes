@@ -8,13 +8,13 @@ WORSICA_COMPONENT=$1
 echo $WORSICA_COMPONENT
 NO_CACHE_FLAG=$2
 echo $NO_CACHE_FLAG
-if ([[ -z $WORSICA_VERSION ]]); then
-	echo 'ERROR: Please set WORSICA_VERSION variable (e.g WORSICA_VERSION=0.9.0)'
+if [[ -z $WORSICA_VERSION ]]; then
+	echo 'ERROR: Please set or export WORSICA_VERSION variable (e.g WORSICA_VERSION=0.9.0)'
 	exit 1
 fi
-echo 'Actual version: ${WORSICA_VERSION}'
+echo "Actual version: ${WORSICA_VERSION}"
 WORSICA_NEXT_VERSION=$(echo ${WORSICA_VERSION} | awk -F. -v OFS=. '{$NF++;print}')
-echo 'Next version: ${WORSICA_NEXT_VERSION}'
+echo "Next version: ${WORSICA_NEXT_VERSION}"
 
 echo '------------------------------------'
 cd $CURRENT_PATH
@@ -48,7 +48,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'essentials' ]]); th
 		cd $CURRENT_PATH
 		echo '2) build with no-cache --------------'
 		FUNC=$(declare -f build_worsica_essentials) #force sudo
-                if (sudo bash -c "$FUNC; build_worsica_essentials $CURRENT_PATH $NO_CACHE_FLAG"); then
+                if (sudo bash -c "$FUNC; build_worsica_essentials $CURRENT_PATH $NO_CACHE_FLAG $WORSICA_NEXT_VERSION"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH		
 		else
@@ -70,7 +70,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'frontend' ]]); then
 		cd $CURRENT_PATH
 		echo '2) build --------------'
 		FUNC=$(declare -f build_worsica_frontend) #force sudo
-                if (sudo bash -c "$FUNC; build_worsica_frontend $CURRENT_PATH"); then
+                if (sudo bash -c "$FUNC; build_worsica_frontend $CURRENT_PATH $WORSICA_NEXT_VERSION"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
 			if (sudo docker save worsica/worsica-kubernetes-frontend:development | ssh vnode-1 "sudo docker load"); then
@@ -100,7 +100,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); 
 		cd $CURRENT_PATH
 		echo '2) build --------------'
 		FUNC=$(declare -f build_worsica_intermediate) #force sudo
-                if (sudo bash -c "$FUNC; build_worsica_intermediate $CURRENT_PATH"); then
+                if (sudo bash -c "$FUNC; build_worsica_intermediate $CURRENT_PATH $WORSICA_NEXT_VERSION"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
 			if (sudo docker save worsica/worsica-kubernetes-intermediate:development | ssh vnode-2 "sudo docker load"); then
@@ -124,4 +124,4 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); 
 fi
 
 WORSICA_VERSION=$WORSICA_NEXT_VERSION
-echo 'Finished! Updated to version: ${WORSICA_NEXT_VERSION}'
+echo "Finished! Updated to version: ${WORSICA_NEXT_VERSION}"

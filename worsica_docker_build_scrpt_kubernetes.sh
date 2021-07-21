@@ -9,31 +9,31 @@ CURRENT_PATH=$HOME/worsica/worsica-kubernetes
 echo $CURRENT_PATH
 NO_CACHE_FLAG=$1
 echo $NO_CACHE_FLAG
-if ([[ -z $WORSICA_VERSION ]]); then
-	echo 'ERROR: Please set WORSICA_VERSION variable (e.g WORSICA_VERSION=0.9.0)'
+if [[ -z $WORSICA_VERSION ]]; then
+	echo 'ERROR: Please set or export WORSICA_VERSION variable (e.g WORSICA_VERSION=0.9.0)'
 	exit 1
 fi
-echo 'Actual version: ${WORSICA_VERSION}'
+echo "Actual version: ${WORSICA_VERSION}"
 WORSICA_NEXT_VERSION=$(echo ${WORSICA_VERSION} | awk -F. -v OFS=. '{$NF++;print}')
-echo 'Next version: ${WORSICA_NEXT_VERSION}'
+echo "Next version: ${WORSICA_NEXT_VERSION}"
 
 echo '------------------------------------'
 echo '1) Building worsica-essentials' 
 #$1 is --no-cache argument (if set)
-build_worsica_essentials $CURRENT_PATH $NO_CACHE_FLAG
+build_worsica_essentials $CURRENT_PATH $NO_CACHE_FLAG $WORSICA_NEXT_VERSION
 
 echo '------------------------------------'
 echo '2) Building worsica-kubernetes-frontend'
-build_worsica_frontend $CURRENT_PATH
+build_worsica_frontend $CURRENT_PATH $WORSICA_NEXT_VERSION
 
 echo '------------------------------------'
 echo '3) Building worsica-kubernetes-intermediate'
-build_worsica_intermediate $CURRENT_PATH
+build_worsica_intermediate $CURRENT_PATH $WORSICA_NEXT_VERSION
 
 #not needed for now
 #echo '------------------------------------'
 #echo '4) Building worsica-kubernetes-processing'
-#build_worsica_frontend $CURRENT_PATH
+#build_worsica_frontend $CURRENT_PATH $WORSICA_NEXT_VERSION
 
 #echo '------------------------------------'
 #echo '6) Stop worsica-kubernetes-frontend docker and worsica-kubernetes-intermediate docker'
@@ -110,5 +110,5 @@ build_worsica_intermediate $CURRENT_PATH
 #fi
 
 WORSICA_VERSION=$WORSICA_NEXT_VERSION
-echo 'Finished! Updated to version: ${WORSICA_NEXT_VERSION}'
+echo "Finished! Updated to version: ${WORSICA_NEXT_VERSION}"
 
