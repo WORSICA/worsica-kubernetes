@@ -16,9 +16,9 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'kubernetes' ]]); th
 	echo '1) git pull --------------'
 	if (cd $CURRENT_PATH && git pull origin $CURRENT_BRANCH); then
 		echo 'git pull success! --------------'
-		cd $CURRENT_PATH
+		cd $CURRENT_PATH/deploy
 		echo '2) kompose --------------'
-		if (kompose convert --controller "deployment" -f ./backend/backend.yml); then
+		if (kompose convert --controller "deployment" -f ../backend/backend.yml); then
 			echo 'kompose success! --------------'
 			cd $CURRENT_PATH
 		else
