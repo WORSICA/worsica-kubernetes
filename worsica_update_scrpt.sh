@@ -20,6 +20,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'kubernetes' ]]); th
 		echo '2) kompose --------------'
 		if (kompose convert --controller "deployment" -f ../backend/backend.yml); then
 			echo 'kompose success! --------------'
+			cp $CURRENT_PATH/kustomization $CURRENT_PATH/deploy
 			cd $CURRENT_PATH
 		else
 			echo 'kompose fail! --------------'
