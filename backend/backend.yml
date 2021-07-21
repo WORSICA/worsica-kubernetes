@@ -56,7 +56,7 @@ services:
       - "nextcloud_data:/var/www/html"
     ports:
       - "8080:80"
-    restart: "on-failure:5"
+    #restart: "on-failure:5"
 
   postgis:
     image: "mdillon/postgis:9.6"
@@ -71,7 +71,7 @@ services:
       - "POSTGRES_PASSWORD=2CqdqDSGpE8EEvdx"
       - "LANG=en_US.utf8"
       - "PGDATA=/var/lib/postgresql/data"
-    restart: "on-failure:5"
+    #restart: "on-failure:5"
     networks:
       - worsica
 
@@ -95,7 +95,7 @@ services:
       - "RABBITMQ_DEFAULT_VHOST=corsica_vhost"
       - "RABBITMQ_DEFAULT_USER=rabbitmq-corsica"
       - "RABBITMQ_DEFAULT_PASS=wn7xNNpK8uRnFQvh"
-    restart: "on-failure:5"
+    #restart: "on-failure:5"
     networks:
       - worsica
 
