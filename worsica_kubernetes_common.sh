@@ -1,7 +1,7 @@
 function build_worsica_essentials {
 	CURRENT_PATH=$1
-	NO_CACHE=$2
-	WORSICA_NEXT_VERSION=$3
+	WORSICA_NEXT_VERSION=$2
+	NO_CACHE=$3	
 	cd $CURRENT_PATH
 	if [[ -z $NO_CACHE ]] ; then
 		echo 'Use cache on the build'

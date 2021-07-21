@@ -48,7 +48,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'essentials' ]]); th
 		cd $CURRENT_PATH
 		echo '2) build with no-cache --------------'
 		FUNC=$(declare -f build_worsica_essentials) #force sudo
-                if (sudo bash -c "$FUNC; build_worsica_essentials $CURRENT_PATH $NO_CACHE_FLAG $WORSICA_NEXT_VERSION"); then
+                if (sudo bash -c "$FUNC; build_worsica_essentials $CURRENT_PATH $WORSICA_NEXT_VERSION $NO_CACHE_FLAG"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH		
 		else
