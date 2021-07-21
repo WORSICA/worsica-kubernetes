@@ -78,4 +78,5 @@ ENV/
 log/
 functional_tests_files/*/*
 repositories/*
+kustomization/*
 
