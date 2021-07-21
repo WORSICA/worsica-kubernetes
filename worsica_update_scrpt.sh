@@ -8,6 +8,13 @@ WORSICA_COMPONENT=$1
 echo $WORSICA_COMPONENT
 NO_CACHE_FLAG=$2
 echo $NO_CACHE_FLAG
+if ([[ -z $WORSICA_VERSION ]]); then
+	echo 'ERROR: Please set WORSICA_VERSION variable (e.g WORSICA_VERSION=0.9.0)'
+	exit 1
+fi
+echo 'Actual version: ${WORSICA_VERSION}'
+WORSICA_NEXT_VERSION=$(echo ${WORSICA_VERSION} | awk -F. -v OFS=. '{$NF++;print}')
+echo 'Next version: ${WORSICA_NEXT_VERSION}'
 
 echo '------------------------------------'
 cd $CURRENT_PATH
@@ -105,3 +112,6 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); 
 		cd $CURRENT_PATH
 	fi
 fi
+
+WORSICA_VERSION=$WORSICA_NEXT_VERSION
+echo 'Finished! Updated to version: ${WORSICA_NEXT_VERSION}'

@@ -9,6 +9,13 @@ CURRENT_PATH=$HOME/worsica/worsica-kubernetes
 echo $CURRENT_PATH
 NO_CACHE_FLAG=$1
 echo $NO_CACHE_FLAG
+if ([[ -z $WORSICA_VERSION ]]); then
+	echo 'ERROR: Please set WORSICA_VERSION variable (e.g WORSICA_VERSION=0.9.0)'
+	exit 1
+fi
+echo 'Actual version: ${WORSICA_VERSION}'
+WORSICA_NEXT_VERSION=$(echo ${WORSICA_VERSION} | awk -F. -v OFS=. '{$NF++;print}')
+echo 'Next version: ${WORSICA_NEXT_VERSION}'
 
 echo '------------------------------------'
 echo '1) Building worsica-essentials' 
@@ -102,5 +109,6 @@ build_worsica_intermediate $CURRENT_PATH
 #	exit 1
 #fi
 
-echo 'Finished!'
+WORSICA_VERSION=$WORSICA_NEXT_VERSION
+echo 'Finished! Updated to version: ${WORSICA_NEXT_VERSION}'
 
