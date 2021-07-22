@@ -80,3 +80,4 @@ functional_tests_files/*/*
 repositories/*
 deploy/*
 *.swp
+WORSICA_VERSION
