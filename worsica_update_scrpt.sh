@@ -114,10 +114,10 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'kubernetes' ]]); th
 			echo 'kompose success! --------------'
 			cp $CURRENT_PATH/kustomization/* $CURRENT_PATH/deploy
 			#change storage size
-			sed -i -e 's/storage: 100Mi/storage: 1Gi/g' pvc-postgis-persistentvolumeclaim.yaml
-			sed -i -e 's/storage: 100Mi/storage: 1Gi/g' pvc-rabbitmq-persistentvolumeclaim.yaml
-			sed -i -e 's/storage: 100Mi/storage: 1Gi/g' pvc-worsica-api-migrations-persistentvolumeclaim.yaml
-			sed -i -e 's/storage: 100Mi/storage: 1Gi/g' pvc-worsica-portal-migrations-persistentvolumeclaim.yaml
+			echo 'apply changes by patch'
+			cd $CURRENT_PATH
+			patch -i $CURRENT_PATH/kustomization/update_storage_and_node_selection.patch -p1 -d deploy/
+			echo 'done'
 			cd $CURRENT_PATH
 		else
 			echo 'kompose fail! --------------'
