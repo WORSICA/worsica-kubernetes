@@ -78,5 +78,5 @@ ENV/
 log/
 functional_tests_files/*/*
 repositories/*
-deploy/*.yaml
-
+deploy/*
+*.swp
