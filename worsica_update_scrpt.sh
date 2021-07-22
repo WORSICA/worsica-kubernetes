@@ -8,38 +8,17 @@ WORSICA_COMPONENT=$1
 echo $WORSICA_COMPONENT
 NO_CACHE_FLAG=$2
 echo $NO_CACHE_FLAG
-if [[ -z $WORSICA_VERSION ]]; then
-	echo 'ERROR: Please set or export WORSICA_VERSION variable (e.g WORSICA_VERSION=0.9.0)'
+if [[ -z $(echo $(cat WORSICA_VERSION)) ]]; then
+	echo 'ERROR: No WORSICA_VERSION file set. Create this file and set version number (0.9.0)'
 	exit 1
 fi
+WORSICA_VERSION=$(echo $(cat WORSICA_VERSION))
 echo "Actual version: ${WORSICA_VERSION}"
 WORSICA_NEXT_VERSION=$(echo ${WORSICA_VERSION} | awk -F. -v OFS=. '{$NF++;print}')
 echo "Next version: ${WORSICA_NEXT_VERSION}"
 
 echo '------------------------------------'
 cd $CURRENT_PATH
-if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'kubernetes' ]]); then
-	echo ' ==========Update worsica-kubernetes  =========='
-	echo '1) git pull --------------'
-	if (cd $CURRENT_PATH && git pull origin $CURRENT_BRANCH); then
-		echo 'git pull success! --------------'
-		cd $CURRENT_PATH #/deploy
-		#echo '2) kompose --------------'
-		#if (kompose convert --controller "deployment" -f ../backend/backend.yml); then
-		#	echo 'kompose success! --------------'
-		#	cp $CURRENT_PATH/kustomization/* $CURRENT_PATH/deploy
-		#	cd $CURRENT_PATH
-		#else
-		#	echo 'kompose fail! --------------'
-		#	cd $CURRENT_PATH
-		#	exit 1
-		#fi
-	else
-		echo 'git pull fail! --------------'
-		cd $CURRENT_PATH
-		exit 1
-	fi
-fi
 if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'essentials' ]]); then
 	echo ' ==========Update worsica-essentials  =========='
 	echo '1) git pull --------------'
@@ -73,7 +52,8 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'frontend' ]]); then
                 if (sudo bash -c "$FUNC; build_worsica_frontend $CURRENT_PATH $WORSICA_NEXT_VERSION"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
-			if (sudo docker save worsica/worsica-kubernetes-frontend:development | ssh vnode-1 "sudo docker load"); then
+			echo 'deploying, please wait...'
+			if (sudo docker save worsica/worsica-kubernetes-frontend:$WORSICA_NEXT_VERSION | ssh vnode-1 "sudo docker load"); then
 				echo 'deployment success! --------------'
 				cd $CURRENT_PATH
 			else
@@ -103,7 +83,8 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); 
                 if (sudo bash -c "$FUNC; build_worsica_intermediate $CURRENT_PATH $WORSICA_NEXT_VERSION"); then
 			echo 'build success! --------------'
 			cd $CURRENT_PATH
-			if (sudo docker save worsica/worsica-kubernetes-intermediate:development | ssh vnode-2 "sudo docker load"); then
+			echo 'deploying, please wait...'
+			if (sudo docker save worsica/worsica-kubernetes-intermediate:$WORSICA_NEXT_VERSION | ssh vnode-2 "sudo docker load"); then
 				echo 'deployment success! --------------'
 				cd $CURRENT_PATH
 			else
@@ -122,6 +103,36 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); 
 		exit 1
 	fi
 fi
+if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'kubernetes' ]]); then
+	echo ' ==========Update worsica-kubernetes  =========='
+	echo '1) git pull --------------'
+	if (cd $CURRENT_PATH && git pull origin $CURRENT_BRANCH); then
+		echo 'git pull success! --------------'
+		cd $CURRENT_PATH/deploy
+		echo '2) kompose --------------'
+		if (kompose convert --controller "deployment" -f ../backend/backend.yml); then
+			echo 'kompose success! --------------'
+			cp $CURRENT_PATH/kustomization/* $CURRENT_PATH/deploy
+			#change storage size
+			sed -i -e 's/storage: 100Mi/storage: 1Gi/g' pvc-postgis-persistentvolumeclaim.yaml
+			sed -i -e 's/storage: 100Mi/storage: 1Gi/g' pvc-rabbitmq-persistentvolumeclaim.yaml
+			sed -i -e 's/storage: 100Mi/storage: 1Gi/g' pvc-worsica-api-migrations-persistentvolumeclaim.yaml
+			sed -i -e 's/storage: 100Mi/storage: 1Gi/g' pvc-worsica-portal-migrations-persistentvolumeclaim.yaml
+			cd $CURRENT_PATH
+		else
+			echo 'kompose fail! --------------'
+			cd $CURRENT_PATH
+			exit 1
+		fi
+	else
+		echo 'git pull fail! --------------'
+		cd $CURRENT_PATH
+		exit 1
+	fi
+fi
 
-WORSICA_VERSION=$WORSICA_NEXT_VERSION
-echo "Finished! Updated to version: ${WORSICA_NEXT_VERSION}"
+#WORSICA_VERSION=$WORSICA_NEXT_VERSION
+cd $CURRENT_PATH
+echo $WORSICA_NEXT_VERSION > WORSICA_VERSION
+WORSICA_VERSION=$(echo $(cat WORSICA_VERSION))
+echo "Finished! Updated to version: ${WORSICA_VERSION}"
