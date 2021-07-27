@@ -48,10 +48,10 @@ services:
     hostname: "nextcloud"
     networks:
       - worsica
-    #environment:
-    #  - "NEXTCLOUD_TRUSTED_DOMAINS='localhost:8080','nextcloud'"
-    #  - "NEXTCLOUD_ADMIN_USER=${WORSICA_NEXTCLOUD_USER}"
-    #  - "NEXTCLOUD_ADMIN_PASSWORD=${WORSICA_NEXTCLOUD_PASSWORD}"
+    environment:
+      - "NEXTCLOUD_TRUSTED_DOMAINS='localhost:8080','nextcloud'"
+      - "NEXTCLOUD_ADMIN_USER=worsicaAdmin"
+      - "NEXTCLOUD_ADMIN_PASSWORD=worsica2020"
     volumes:
       - "nextcloud_data:/var/www/html"
     ports:

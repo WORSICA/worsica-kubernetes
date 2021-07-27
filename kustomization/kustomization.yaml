@@ -18,3 +18,4 @@ resources:
  - kubernetes-intermediate-service.yaml
  - kubernetes-frontend-deployment.yaml
  - kubernetes-frontend-service.yaml
+ - worsica-ingress.yaml

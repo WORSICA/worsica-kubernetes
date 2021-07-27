@@ -79,5 +79,7 @@ log/
 functional_tests_files/*/*
 repositories/*
 deploy/*
+default/
+certs/
 *.swp
 WORSICA_VERSION

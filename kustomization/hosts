@@ -1,5 +1,5 @@
-10.107.223.132 frontend
-10.106.139.59 intermediate
-10.100.109.121 nextcloud
-10.102.225.246 postgis
-10.104.2.252 rabbitmq
+10.244.1.13 frontend
+10.244.3.18 intermediate
+10.244.3.16 nextcloud
+10.244.2.3 postgis
+10.244.4.3 rabbitmq

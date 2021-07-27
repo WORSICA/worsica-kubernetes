@@ -8,11 +8,11 @@ WORSICA_COMPONENT=$1
 echo $WORSICA_COMPONENT
 NO_CACHE_FLAG=$2
 echo $NO_CACHE_FLAG
-if [[ -z $(echo $(cat WORSICA_VERSION)) ]]; then
+if [[ -z $(echo $(cat $CURRENT_PATH/WORSICA_VERSION)) ]]; then
 	echo 'ERROR: No WORSICA_VERSION file set. Create this file and set version number (0.9.0)'
 	exit 1
 fi
-WORSICA_VERSION=$(echo $(cat WORSICA_VERSION))
+WORSICA_VERSION=$(cat $CURRENT_PATH/WORSICA_VERSION)
 echo "Actual version: ${WORSICA_VERSION}"
 WORSICA_NEXT_VERSION=$(echo ${WORSICA_VERSION} | awk -F. -v OFS=. '{$NF++;print}')
 echo "Next version: ${WORSICA_NEXT_VERSION}"
@@ -110,6 +110,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'kubernetes' ]]); th
 		echo 'git pull success! --------------'
 		cd $CURRENT_PATH/deploy
 		echo '2) kompose --------------'
+		export WORSICA_NEXT_VERSION
 		if (kompose convert --controller "deployment" -f ../backend/backend.yml); then
 			echo 'kompose success! --------------'
 			cp $CURRENT_PATH/kustomization/* $CURRENT_PATH/deploy
@@ -130,9 +131,26 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'kubernetes' ]]); th
 		exit 1
 	fi
 fi
+if ([[ -z $WORSICA_COMPONENT ]]); then
+	echo 'apply changes'
+	sudo kubectl apply -k deploy
+	echo 'ok, applied changes'
+	echo 'wait...'
+	sudo sudo kubectl wait deploy --all --for condition=available -n worsica --timeout=240s
+	echo 'update hosts files'
+	sudo kubectl get pods -n worsica -o wide | awk '(NR>1) { sub(/kubernetes-/,"",$1); sub(/-[A-Za-z0-9-]*/,"",$1); print $6 " " $1; }' > $CURRENT_PATH/kustomization/hosts
+	#sudo kubectl get services -n worsica -o wide | awk '(NR>1) { sub(/kubernetes-/,"",$1); sub(/-[A-Za-z0-9-]*/,"",$1); print $3 " " $1 }' >> $CURRENT_PATH/kustomization/hosts
+	echo 'add or update the hosts'
+	for c in $(sudo kubectl get pods -n worsica | awk '(NR>1) { print $1 }'); do 
+		#this is a very dirty hack, copy original hosts to new, edit new with sed, and copy new back to original
+		sudo kubectl exec -n worsica --stdin --tty $c -- bash -c "cp /etc/hosts ~/hosts.new && sed -i 's/10.[0-9.]*[[:space:]]*[a-z]*//g' ~/hosts.new && sed -i '/^$/d' ~/hosts.new && cp -f ~/hosts.new /etc/hosts"
+		cat ~/worsica/worsica-kubernetes/kustomization/hosts | sudo kubectl exec -i -n worsica $c -- bash -c 'cat >> /etc/hosts'
+	done
+	echo 'added or updated the hosts'
+fi
 
 #WORSICA_VERSION=$WORSICA_NEXT_VERSION
 cd $CURRENT_PATH
 echo $WORSICA_NEXT_VERSION > WORSICA_VERSION
-WORSICA_VERSION=$(echo $(cat WORSICA_VERSION))
+WORSICA_VERSION=$(cat $CURRENT_PATH/WORSICA_VERSION)
 echo "Finished! Updated to version: ${WORSICA_VERSION}"
