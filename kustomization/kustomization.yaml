@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: worsica
+resources:
+ - worsica-namespace.yaml
+ - nextcloud-data-persistentvolumeclaim.yaml
+ - pvc-worsica-api-migrations-persistentvolumeclaim.yaml
+ - pvc-worsica-portal-migrations-persistentvolumeclaim.yaml
+ - pvc-postgis-persistentvolumeclaim.yaml
+ - pvc-rabbitmq-persistentvolumeclaim.yaml
+ - postgis-deployment.yaml
+ - postgis-service.yaml
+ - rabbitmq-deployment.yaml
+ - rabbitmq-service.yaml
+ - nextcloud-deployment.yaml
+ - nextcloud-service.yaml
+ - kubernetes-intermediate-deployment.yaml
+ - kubernetes-intermediate-service.yaml
+ - kubernetes-frontend-deployment.yaml
+ - kubernetes-frontend-service.yaml
+ - worsica-ingress.yaml

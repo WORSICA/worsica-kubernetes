@@ -1,0 +1,105 @@
+diff -Naur default/kubernetes-frontend-deployment.yaml deploy/kubernetes-frontend-deployment.yaml
+--- default/kubernetes-frontend-deployment.yaml	2021-07-22 14:36:09.440000000 +0000
++++ deploy/kubernetes-frontend-deployment.yaml	2021-07-22 17:23:46.224000000 +0000
+@@ -25,6 +25,7 @@
+         io.kompose.network/worsica: "true"
+         io.kompose.service: kubernetes-frontend
+     spec:
++      nodeName: vnode-1.localdomain
+       containers:
+         - args:
+             - /usr/local/worsica_web/worsica_runserver.sh
+diff -Naur default/kubernetes-intermediate-deployment.yaml deploy/kubernetes-intermediate-deployment.yaml
+--- default/kubernetes-intermediate-deployment.yaml	2021-07-22 14:36:09.444000000 +0000
++++ deploy/kubernetes-intermediate-deployment.yaml	2021-07-22 17:23:46.228000000 +0000
+@@ -25,6 +25,7 @@
+         io.kompose.network/worsica: "true"
+         io.kompose.service: kubernetes-intermediate
+     spec:
++      nodeName: vnode-2.localdomain
+       containers:
+         - args:
+             - /usr/local/worsica_web_intermediate/worsica_runserver.sh
+diff -Naur default/nextcloud-data-persistentvolumeclaim.yaml deploy/nextcloud-data-persistentvolumeclaim.yaml
+--- default/nextcloud-data-persistentvolumeclaim.yaml	2021-07-22 14:36:09.444000000 +0000
++++ deploy/nextcloud-data-persistentvolumeclaim.yaml	2021-07-22 16:47:18.820000000 +0000
+@@ -10,5 +10,5 @@
+     - ReadWriteOnce
+   resources:
+     requests:
+-      storage: 100Mi
++      storage: 1Ti
+ status: {}
+diff -Naur default/nextcloud-deployment.yaml deploy/nextcloud-deployment.yaml
+--- default/nextcloud-deployment.yaml	2021-07-22 14:36:09.444000000 +0000
++++ deploy/nextcloud-deployment.yaml	2021-07-22 17:23:46.232000000 +0000
+@@ -25,6 +25,7 @@
+         io.kompose.network/worsica: "true"
+         io.kompose.service: nextcloud
+     spec:
++      nodeName: vnode-2.localdomain
+       containers:
+         - image: nextcloud:21.0.3-apache
+           name: nextcloud
+diff -Naur default/postgis-deployment.yaml deploy/postgis-deployment.yaml
+--- default/postgis-deployment.yaml	2021-07-22 14:36:09.448000000 +0000
++++ deploy/postgis-deployment.yaml	2021-07-22 17:23:46.232000000 +0000
+@@ -25,6 +25,7 @@
+         io.kompose.network/worsica: "true"
+         io.kompose.service: postgis
+     spec:
++      nodeName: vnode-3.localdomain
+       containers:
+         - env:
+             - name: LANG
+diff -Naur default/pvc-postgis-persistentvolumeclaim.yaml deploy/pvc-postgis-persistentvolumeclaim.yaml
+--- default/pvc-postgis-persistentvolumeclaim.yaml	2021-07-22 16:48:15.880000000 +0000
++++ deploy/pvc-postgis-persistentvolumeclaim.yaml	2021-07-22 16:47:18.840000000 +0000
+@@ -10,5 +10,5 @@
+     - ReadWriteOnce
+   resources:
+     requests:
+-      storage: 100Mi
++      storage: 300Gi
+ status: {}
+diff -Naur default/pvc-rabbitmq-persistentvolumeclaim.yaml deploy/pvc-rabbitmq-persistentvolumeclaim.yaml
+--- default/pvc-rabbitmq-persistentvolumeclaim.yaml	2021-07-22 16:48:15.944000000 +0000
++++ deploy/pvc-rabbitmq-persistentvolumeclaim.yaml	2021-07-22 14:36:09.452000000 +0000
+@@ -10,5 +10,5 @@
+     - ReadWriteOnce
+   resources:
+     requests:
+-      storage: 100Mi
++      storage: 1Gi
+ status: {}
+diff -Naur default/pvc-worsica-api-migrations-persistentvolumeclaim.yaml deploy/pvc-worsica-api-migrations-persistentvolumeclaim.yaml
+--- default/pvc-worsica-api-migrations-persistentvolumeclaim.yaml	2021-07-22 16:48:15.976000000 +0000
++++ deploy/pvc-worsica-api-migrations-persistentvolumeclaim.yaml	2021-07-22 14:36:09.452000000 +0000
+@@ -10,5 +10,5 @@
+     - ReadWriteOnce
+   resources:
+     requests:
+-      storage: 100Mi
++      storage: 1Gi
+ status: {}
+diff -Naur default/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml deploy/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml
+--- default/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml	2021-07-22 16:48:12.764000000 +0000
++++ deploy/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml	2021-07-22 14:36:09.456000000 +0000
+@@ -10,5 +10,5 @@
+     - ReadWriteOnce
+   resources:
+     requests:
+-      storage: 100Mi
++      storage: 1Gi
+ status: {}
+diff -Naur default/rabbitmq-deployment.yaml deploy/rabbitmq-deployment.yaml
+--- default/rabbitmq-deployment.yaml	2021-07-22 14:36:09.448000000 +0000
++++ deploy/rabbitmq-deployment.yaml	2021-07-22 17:23:46.236000000 +0000
+@@ -25,6 +25,7 @@
+         io.kompose.network/worsica: "true"
+         io.kompose.service: rabbitmq
+     spec:
++      nodeName: vnode-4.localdomain
+       containers:
+         - env:
+             - name: RABBITMQ_DEFAULT_PASS

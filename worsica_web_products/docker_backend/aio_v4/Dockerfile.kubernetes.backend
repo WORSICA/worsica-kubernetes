@@ -1,0 +1,10 @@
+#DOCKER BACKEND
+FROM worsica/worsica-processing:development
+MAINTAINER Ricardo Martins <rjmartins@lnec.pt>
+
+COPY /repositories/worsica-processing /usr/local/worsica_web_products
+
+#set the path enviroment variable and the cwd
+ENV PATH /usr/local/worsica_web-py363_venv/bin:${PATH}
+WORKDIR /usr/local/worsica_web_products
+

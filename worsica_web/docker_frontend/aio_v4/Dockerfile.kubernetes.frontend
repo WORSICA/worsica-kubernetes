@@ -1,0 +1,11 @@
+#DOCKER FRONTEND
+FROM worsica/worsica-frontend:development
+MAINTAINER Ricardo Martins <rjmartins@lnec.pt>
+
+COPY /repositories/worsica-frontend /usr/local/worsica_web
+
+#set the path enviroment variable and the cwd
+ENV PATH /usr/local/worsica_web-py363_venv/bin:${PATH}
+WORKDIR /usr/local/worsica_web
+
+
