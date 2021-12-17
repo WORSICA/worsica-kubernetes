@@ -83,3 +83,5 @@ default/
 certs/
 *.swp
 WORSICA_VERSION
+worsica-kompose/*
+worsica-templates/*

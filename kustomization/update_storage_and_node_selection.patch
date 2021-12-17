@@ -1,6 +1,6 @@
 diff -Naur default/kubernetes-frontend-deployment.yaml deploy/kubernetes-frontend-deployment.yaml
---- default/kubernetes-frontend-deployment.yaml	2021-07-22 14:36:09.440000000 +0000
-+++ deploy/kubernetes-frontend-deployment.yaml	2021-07-22 17:23:46.224000000 +0000
+--- default/kubernetes-frontend-deployment.yaml	2021-12-15 18:11:16.272568496 +0000
++++ deploy/kubernetes-frontend-deployment.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -25,6 +25,7 @@
          io.kompose.network/worsica: "true"
          io.kompose.service: kubernetes-frontend
@@ -10,8 +10,8 @@ diff -Naur default/kubernetes-frontend-deployment.yaml deploy/kubernetes-fronten
          - args:
              - /usr/local/worsica_web/worsica_runserver.sh
 diff -Naur default/kubernetes-intermediate-deployment.yaml deploy/kubernetes-intermediate-deployment.yaml
---- default/kubernetes-intermediate-deployment.yaml	2021-07-22 14:36:09.444000000 +0000
-+++ deploy/kubernetes-intermediate-deployment.yaml	2021-07-22 17:23:46.228000000 +0000
+--- default/kubernetes-intermediate-deployment.yaml	2021-12-15 18:11:16.276568494 +0000
++++ deploy/kubernetes-intermediate-deployment.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -25,6 +25,7 @@
          io.kompose.network/worsica: "true"
          io.kompose.service: kubernetes-intermediate
@@ -21,8 +21,8 @@ diff -Naur default/kubernetes-intermediate-deployment.yaml deploy/kubernetes-int
          - args:
              - /usr/local/worsica_web_intermediate/worsica_runserver.sh
 diff -Naur default/nextcloud-data-persistentvolumeclaim.yaml deploy/nextcloud-data-persistentvolumeclaim.yaml
---- default/nextcloud-data-persistentvolumeclaim.yaml	2021-07-22 14:36:09.444000000 +0000
-+++ deploy/nextcloud-data-persistentvolumeclaim.yaml	2021-07-22 16:47:18.820000000 +0000
+--- default/nextcloud-data-persistentvolumeclaim.yaml	2021-12-15 18:11:16.280568493 +0000
++++ deploy/nextcloud-data-persistentvolumeclaim.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -10,5 +10,5 @@
      - ReadWriteOnce
    resources:
@@ -31,19 +31,19 @@ diff -Naur default/nextcloud-data-persistentvolumeclaim.yaml deploy/nextcloud-da
 +      storage: 1Ti
  status: {}
 diff -Naur default/nextcloud-deployment.yaml deploy/nextcloud-deployment.yaml
---- default/nextcloud-deployment.yaml	2021-07-22 14:36:09.444000000 +0000
-+++ deploy/nextcloud-deployment.yaml	2021-07-22 17:23:46.232000000 +0000
+--- default/nextcloud-deployment.yaml	2021-12-15 18:11:16.280568493 +0000
++++ deploy/nextcloud-deployment.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -25,6 +25,7 @@
          io.kompose.network/worsica: "true"
          io.kompose.service: nextcloud
      spec:
 +      nodeName: vnode-2.localdomain
        containers:
-         - image: nextcloud:21.0.3-apache
-           name: nextcloud
+         - env:
+             - name: NEXTCLOUD_ADMIN_PASSWORD
 diff -Naur default/postgis-deployment.yaml deploy/postgis-deployment.yaml
---- default/postgis-deployment.yaml	2021-07-22 14:36:09.448000000 +0000
-+++ deploy/postgis-deployment.yaml	2021-07-22 17:23:46.232000000 +0000
+--- default/postgis-deployment.yaml	2021-12-15 18:11:16.280568493 +0000
++++ deploy/postgis-deployment.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -25,6 +25,7 @@
          io.kompose.network/worsica: "true"
          io.kompose.service: postgis
@@ -53,8 +53,8 @@ diff -Naur default/postgis-deployment.yaml deploy/postgis-deployment.yaml
          - env:
              - name: LANG
 diff -Naur default/pvc-postgis-persistentvolumeclaim.yaml deploy/pvc-postgis-persistentvolumeclaim.yaml
---- default/pvc-postgis-persistentvolumeclaim.yaml	2021-07-22 16:48:15.880000000 +0000
-+++ deploy/pvc-postgis-persistentvolumeclaim.yaml	2021-07-22 16:47:18.840000000 +0000
+--- default/pvc-postgis-persistentvolumeclaim.yaml	2021-12-15 18:11:16.280568493 +0000
++++ deploy/pvc-postgis-persistentvolumeclaim.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -10,5 +10,5 @@
      - ReadWriteOnce
    resources:
@@ -63,8 +63,8 @@ diff -Naur default/pvc-postgis-persistentvolumeclaim.yaml deploy/pvc-postgis-per
 +      storage: 300Gi
  status: {}
 diff -Naur default/pvc-rabbitmq-persistentvolumeclaim.yaml deploy/pvc-rabbitmq-persistentvolumeclaim.yaml
---- default/pvc-rabbitmq-persistentvolumeclaim.yaml	2021-07-22 16:48:15.944000000 +0000
-+++ deploy/pvc-rabbitmq-persistentvolumeclaim.yaml	2021-07-22 14:36:09.452000000 +0000
+--- default/pvc-rabbitmq-persistentvolumeclaim.yaml	2021-12-15 18:11:16.280568493 +0000
++++ deploy/pvc-rabbitmq-persistentvolumeclaim.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -10,5 +10,5 @@
      - ReadWriteOnce
    resources:
@@ -73,8 +73,8 @@ diff -Naur default/pvc-rabbitmq-persistentvolumeclaim.yaml deploy/pvc-rabbitmq-p
 +      storage: 1Gi
  status: {}
 diff -Naur default/pvc-worsica-api-migrations-persistentvolumeclaim.yaml deploy/pvc-worsica-api-migrations-persistentvolumeclaim.yaml
---- default/pvc-worsica-api-migrations-persistentvolumeclaim.yaml	2021-07-22 16:48:15.976000000 +0000
-+++ deploy/pvc-worsica-api-migrations-persistentvolumeclaim.yaml	2021-07-22 14:36:09.452000000 +0000
+--- default/pvc-worsica-api-migrations-persistentvolumeclaim.yaml	2021-12-15 18:11:16.276568494 +0000
++++ deploy/pvc-worsica-api-migrations-persistentvolumeclaim.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -10,5 +10,5 @@
      - ReadWriteOnce
    resources:
@@ -83,8 +83,8 @@ diff -Naur default/pvc-worsica-api-migrations-persistentvolumeclaim.yaml deploy/
 +      storage: 1Gi
  status: {}
 diff -Naur default/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml deploy/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml
---- default/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml	2021-07-22 16:48:12.764000000 +0000
-+++ deploy/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml	2021-07-22 14:36:09.456000000 +0000
+--- default/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml	2021-12-15 18:11:16.276568494 +0000
++++ deploy/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -10,5 +10,5 @@
      - ReadWriteOnce
    resources:
@@ -92,9 +92,39 @@ diff -Naur default/pvc-worsica-portal-migrations-persistentvolumeclaim.yaml depl
 -      storage: 100Mi
 +      storage: 1Gi
  status: {}
+diff -Naur default/pvc-worsica-processing-coastal-persistentvolumeclaim.yaml deploy/pvc-worsica-processing-coastal-persistentvolumeclaim.yaml
+--- default/pvc-worsica-processing-coastal-persistentvolumeclaim.yaml	2021-12-15 18:11:16.276568494 +0000
++++ deploy/pvc-worsica-processing-coastal-persistentvolumeclaim.yaml	2021-12-15 17:54:32.631879732 +0000
+@@ -10,5 +10,5 @@
+     - ReadWriteOnce
+   resources:
+     requests:
+-      storage: 100Mi
++      storage: 450Gi
+ status: {}
+diff -Naur default/pvc-worsica-processing-inland-persistentvolumeclaim.yaml deploy/pvc-worsica-processing-inland-persistentvolumeclaim.yaml
+--- default/pvc-worsica-processing-inland-persistentvolumeclaim.yaml	2021-12-15 18:11:16.276568494 +0000
++++ deploy/pvc-worsica-processing-inland-persistentvolumeclaim.yaml	2021-12-15 17:54:38.851868015 +0000
+@@ -10,5 +10,5 @@
+     - ReadWriteOnce
+   resources:
+     requests:
+-      storage: 100Mi
++      storage: 450Gi
+ status: {}
+diff -Naur default/pvc-worsica-processing-waterleak-persistentvolumeclaim.yaml deploy/pvc-worsica-processing-waterleak-persistentvolumeclaim.yaml
+--- default/pvc-worsica-processing-waterleak-persistentvolumeclaim.yaml	2021-12-15 18:11:16.276568494 +0000
++++ deploy/pvc-worsica-processing-waterleak-persistentvolumeclaim.yaml	2021-12-15 17:54:49.459848406 +0000
+@@ -10,5 +10,5 @@
+     - ReadWriteOnce
+   resources:
+     requests:
+-      storage: 100Mi
++      storage: 450Gi
+ status: {}
 diff -Naur default/rabbitmq-deployment.yaml deploy/rabbitmq-deployment.yaml
---- default/rabbitmq-deployment.yaml	2021-07-22 14:36:09.448000000 +0000
-+++ deploy/rabbitmq-deployment.yaml	2021-07-22 17:23:46.236000000 +0000
+--- default/rabbitmq-deployment.yaml	2021-12-15 18:11:16.280568493 +0000
++++ deploy/rabbitmq-deployment.yaml	2021-12-15 17:51:55.964242412 +0000
 @@ -25,6 +25,7 @@
          io.kompose.network/worsica: "true"
          io.kompose.service: rabbitmq

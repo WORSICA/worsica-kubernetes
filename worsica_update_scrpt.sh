@@ -72,6 +72,18 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'frontend' ]]); then
 		exit 1
 	fi
 fi
+if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'processing' ]]); then
+	echo ' ==========Update worsica-processing =========='
+	echo '1) git pull --------------'
+	if (cd $CURRENT_PATH/repositories/worsica-processing && git pull origin $CURRENT_BRANCH); then
+		echo 'git pull success! --------------'
+		cd $CURRENT_PATH
+	else
+		echo 'git pull fail! --------------'
+		cd $CURRENT_PATH
+		exit 1
+	fi
+fi
 if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); then
 	echo ' ==========Update worsica-intermediate  =========='
 	echo '1) git pull --------------'
@@ -117,6 +129,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'kubernetes' ]]); th
 			#change storage size
 			echo 'apply changes by patch'
 			cd $CURRENT_PATH
+			#diff -Naur $CURRENT_PATH/default/ $CURRENT_PATH/deploy/
 			patch -i $CURRENT_PATH/kustomization/update_storage_and_node_selection.patch -p1 -d deploy/
 			echo 'done'
 			cd $CURRENT_PATH
@@ -140,6 +153,11 @@ if ([[ -z $WORSICA_COMPONENT ]]); then
 	#echo 'update hosts files'
 	sudo kubectl get pods -n worsica -o wide | awk '(NR>1) { sub(/kubernetes-/,"",$1); sub(/-[A-Za-z0-9-]*/,"",$1); print $6 " " $1; }' > $CURRENT_PATH/kustomization/hosts
 	#sudo kubectl get services -n worsica -o wide | awk '(NR>1) { sub(/kubernetes-/,"",$1); sub(/-[A-Za-z0-9-]*/,"",$1); print $3 " " $1 }' >> $CURRENT_PATH/kustomization/hosts	
+	echo 'cleanup evicted pods'
+	for each in $(sudo kubectl get pods -n worsica | grep Evicted | awk '{print $1}'); do
+	        sudo kubectl delete pods $each -n worsica
+	done
+	echo 'cleaned evicted pods'
 	for c in $(sudo kubectl get pods -n worsica | awk '(NR>1) { print $1 }'); do 
 		echo $c
 		echo 'add or update the hosts'

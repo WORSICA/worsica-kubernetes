@@ -8,10 +8,9 @@ services:
     hostname: "intermediate"
     volumes:
        - "pvc_worsica_api_migrations:/usr/local/worsica_web_intermediate/worsica_api/migrations"
-    #  - /home/centos/worsica_web_intermediate:/usr/local/worsica_web_intermediate
-    #  - /home/centos/worsica_web_products:/usr/local/worsica_web_products
-    #  - /dev/log:/dev/log
-    #  - /etc/hosts:/etc/hosts
+       - "pvc_worsica_processing_coastal:/usr/local/worsica_web_products/coastal"
+       - "pvc_worsica_processing_inland:/usr/local/worsica_web_products/inland"
+       - "pvc_worsica_processing_waterleak:/usr/local/worsica_web_products/waterleak"
     entrypoint: "/bin/bash"
     command: "/usr/local/worsica_web_intermediate/worsica_runserver.sh"
     depends_on:

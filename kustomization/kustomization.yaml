@@ -6,6 +6,9 @@ resources:
  - nextcloud-data-persistentvolumeclaim.yaml
  - pvc-worsica-api-migrations-persistentvolumeclaim.yaml
  - pvc-worsica-portal-migrations-persistentvolumeclaim.yaml
+ - pvc-worsica-processing-coastal-persistentvolumeclaim.yaml
+ - pvc-worsica-processing-inland-persistentvolumeclaim.yaml
+ - pvc-worsica-processing-waterleak-persistentvolumeclaim.yaml
  - pvc-postgis-persistentvolumeclaim.yaml
  - pvc-rabbitmq-persistentvolumeclaim.yaml
  - postgis-deployment.yaml

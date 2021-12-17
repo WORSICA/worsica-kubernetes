@@ -1,0 +1,35 @@
+configs:
+ credentials:
+  - id: auth_egi
+    type: file
+    variable: $AUTH_EGI
+ deployments:
+  worsica-dev:
+    composer: 'kubernetes'
+    tools:
+     run:
+      pre:
+      - podTemplate: https://github.com/WORSICA/worsica-templates/im.yml
+        container: im
+        commands:
+        - wget https://github.com/WORSICA/worsica-kubernetes/worsica.tosca
+        - im getoutputs $(im -a auth_egi.dat -r https://appsgrycap.i3m.upv.es:31443/im/ create worsica.tosca) > worsica_infra.out
+      - podTemplate: https://github.com/WORSICA/worsica-templates/kubespray.yml
+        container: kubespray
+        commands:
+        - generate-inventory.sh
+        - ansible-playbook -i /inventory/inventory.ini --private-key /root/.ssh/id_rsa cluster.yml
+      - podTemplate: https://github.com/WORSICA/worsica-templates/kompose.yml
+        container: kompose
+        commands:
+        - worsica_kompose_scrpt.sh
+     kustomize:
+      image: bitnami/kubectl:1.21
+      repo: https://github.com/WORSICA/worsica-kompose.git
+      directory: './deploy'
+    
+     post:
+     - podTemplate: https://github.com/WORSICA/worsica-templates/patch.yml
+       container: patch
+       commands:
+       - worsica_after_deployment.sh
