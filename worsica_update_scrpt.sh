@@ -159,16 +159,22 @@ if ([[ -z $WORSICA_COMPONENT ]]); then
 	done
 	echo 'cleaned evicted pods'
 	for c in $(sudo kubectl get pods -n worsica | awk '(NR>1) { print $1 }'); do 
-		echo $c
+		echo "$c"
+		NETCDF_PATH=bin/FES2014/data/
+		if [[ $c == *'intermediate'* ]]; then
+			echo "copy /pv/temp/netcdf/$NETCDF_PATH worsica/$c:/usr/local/bin/FES2014/"
+			sudo kubectl cp /pv/temp/netcdf/$NETCDF_PATH worsica/$c:/usr/local/bin/FES2014/
+			echo "copied /pv/temp/netcdf/$NETCDF_PATH worsica/$c:/usr/local/bin/FES2014/"
+		fi
 		echo 'add or update the hosts'
 		#this is a very dirty hack, copy original hosts to new, edit new with sed, and copy new back to original
 		sudo kubectl exec -n worsica --stdin --tty $c -- bash -c "cp /etc/hosts ~/hosts.new && sed -i 's/10.[0-9.]*[[:space:]]*[a-z]*//g' ~/hosts.new && sed -i '/^$/d' ~/hosts.new && cp -f ~/hosts.new /etc/hosts"
 		cat ~/worsica/worsica-kubernetes/kustomization/hosts | sudo kubectl exec -i -n worsica $c -- bash -c 'cat >> /etc/hosts'
 		echo 'added or updated the hosts'
 		if [[ $c == *'frontend'* ]] || [[ $c == *'intermediate'* ]]; then
-			echo 'apply collect static to $c'
+			echo "apply collect static to $c"
 			sudo kubectl exec -n worsica --stdin --tty $c -- bash -c "python3 manage.py collectstatic --noinput"
-			echo 'applied collect static to $c'
+			echo "applied collect static to $c"
 		fi
 		echo 'done!'
 	done

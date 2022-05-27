@@ -19,4 +19,14 @@ spec:
             name: kubernetes-frontend
             port:
               number: 8001
+  - host: worsica-nextcloud.a.incd.pt
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nextcloud
+            port:
+              number: 8080
 
