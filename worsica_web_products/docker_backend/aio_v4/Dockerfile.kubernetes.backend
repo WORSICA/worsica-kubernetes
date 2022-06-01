@@ -1,4 +1,5 @@
 #DOCKER BACKEND
+#useless for now
 FROM worsica/worsica-processing:development
 MAINTAINER Ricardo Martins <rjmartins@lnec.pt>
 

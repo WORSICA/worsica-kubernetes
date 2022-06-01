@@ -133,3 +133,78 @@ diff -Naur default/rabbitmq-deployment.yaml deploy/rabbitmq-deployment.yaml
        containers:
          - env:
              - name: RABBITMQ_DEFAULT_PASS
+--- default/kubernetes-intermediate-deployment.yaml	2022-05-30 16:54:55.516449242 +0000
++++ default/kubernetes-intermediate-deployment2.yaml	2022-05-30 16:49:00.000000000 +0000
+@@ -45,6 +45,9 @@
+               name: pvc-worsica-processing-inland
+             - mountPath: /usr/local/worsica_web_products/waterleak
+               name: pvc-worsica-processing-waterleak
++            - mountPath: /usr/local/worsica_web_intermediate/certs/lnec
++              name: grid-certs
++              readOnly: true
+       hostname: intermediate
+       restartPolicy: Always
+       volumes:
+@@ -60,4 +63,8 @@
+         - name: pvc-worsica-processing-waterleak
+           persistentVolumeClaim:
+             claimName: pvc-worsica-processing-waterleak
++        - name: grid-certs
++          secret:
++            secretName: worsica-cert-robot-key
++            optional: false
+ status: {}
+--- default/kubernetes-intermediate-deployment.yaml	2022-05-31 14:58:23.589931240 +0000
++++ default/kubernetes-intermediate-deployment2.yaml	2022-05-31 16:53:05.393310159 +0000
+@@ -47,7 +47,7 @@
+               name: pvc-worsica-processing-waterleak
+             - mountPath: /usr/local/worsica_web_intermediate/certs/lnec
+               name: grid-certs
+-              readOnly: true
++              readOnly: false
+       hostname: intermediate
+       restartPolicy: Always
+       volumes:
+@@ -67,4 +67,11 @@
+           secret:
+             secretName: worsica-cert-robot-key
+             optional: false
++            items:
++            - key: tls.key
++              path: .
++              mode: 0400
++            - key: tls.crt
++              path: .
++              mode: 0644
+ status: {}
+--- default/kubernetes-intermediate-deployment.yaml	2022-05-31 17:08:08.021193770 +0000
++++ default/kubernetes-intermediate-deployment2.yaml	2022-05-31 17:16:31.269098830 +0000
+@@ -67,11 +67,11 @@
+           secret:
+             secretName: worsica-cert-robot-key
+             optional: false
+-            items:
+-            - key: tls.key
+-              path: .
+-              mode: 0400
+-            - key: tls.crt
+-              path: .
+-              mode: 0644
++            #items:
++            #- key: tls.key
++            #  path: .
++            #  mode: 0400
++            #- key: tls.crt
++            #  path: .
++            #  mode: 0644
+ status: {}
+--- default/kubernetes-intermediate-deployment.yaml	2022-05-31 17:22:55.777029623 +0000
++++ default/kubernetes-intermediate-deployment2.yaml	2022-06-01 10:31:58.210646742 +0000
+@@ -66,6 +66,7 @@
+         - name: grid-certs
+           secret:
+             secretName: worsica-cert-robot-key
++            defaultMode: 0400
+             optional: false
+             #items:
+             #- key: tls.key

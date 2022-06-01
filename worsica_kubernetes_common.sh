@@ -78,24 +78,37 @@ function build_worsica_intermediate {
 	fi
 }
 
-#function build_worsica_processing {
-	#CURRENT_PATH = $1
-	#cd $CURRENT_PATH 
-	#if docker build -t worsica/worsica-processing:development -f $CURRENT_PATH/repositories/worsica-processing/docker_backend/aio_v4/Dockerfile.backend . ; then
-	#	echo 'Building worsica-backend: Success!'
-	#	cd $CURRENT_PATH
-	#else
-	#	echo 'Building worsica-backend: Fail!'
-	#	cd $CURRENT_PATH
-	#	exit 1
-	#fi
-	#cd $CURRENT_PATH
-	#if docker build -t worsica/worsica-kubernetes-processing:$WORSICA_NEXT_VERSION -f $CURRENT_PATH/worsica_web_products/docker_backend/aio_v4/Dockerfile.kubernetes.backend . ; then
-	#	echo 'Building worsica-kubernetes-backend: Success!'
-	#	cd $CURRENT_PATH
-	#else
-	#	echo 'Building worsica-kubernetes-backend: Fail!'
-	#	cd $CURRENT_PATH
-	#	exit 1
-	#fi
-#}
+function build_worsica_processing {
+	CURRENT_PATH=$1
+	WORSICA_NEXT_VERSION=$2
+	cd $CURRENT_PATH 
+	if docker build -t worsica/worsica-processing:development -f $CURRENT_PATH/repositories/worsica-processing/docker_backend/aio_v4/Dockerfile.backend . ; then
+		echo 'Building worsica-backend: Success!'
+		cd $CURRENT_PATH
+	else
+		echo 'Building worsica-backend: Fail!'
+		cd $CURRENT_PATH
+		exit 1
+	fi
+	echo 'Saving image to tar'
+	TAR_FILE=worsica-processing-dev.tar
+	NEXTCLOUD_PATH="https://worsica-nextcloud.a.incd.pt/remote.php/dav/files/worsicaAdmin"
+	if docker save -o $CURRENT_PATH/$TAR_FILE worsica/worsica-processing:development ; then
+		echo 'Saved image, upload to Nextcloud'
+	    	echo "Uploading $CURRENT_PATH/$TAR_FILE to $NEXTCLOUD_PATH/$TAR_FILE";
+		CURL_STATUS=$(curl --max-time 600 -u worsicaAdmin:worsica2020 -T $CURRENT_PATH/$TAR_FILE $NEXTCLOUD_PATH/$TAR_FILE -w '<http_code>%{http_code}</http_code>' | grep -oP '(?<=<http_code>).*?(?=</http_code>)')
+		echo $CURL_STATUS
+		if [[ $CURL_STATUS -eq 201 ]] || [[ $CURL_STATUS -eq 204 ]]; then
+			echo "[SUCCESS] Uploaded to nextcloud $CURRENT_PATH/$TAR_FILE to $NEXTCLOUD_PATH/$TAR_FILE"
+			rm $CURRENT_PATH/$TAR_FILE
+		else
+			echo "[FAILURE] Fail upload to nextcloud $CURRENT_PATH/$TAR_FILE to $NEXTCLOUD_PATH/$TAR_FILE"
+			exit 1
+		fi
+	else
+		echo 'Saving image: Fail!'
+		cd $CURRENT_PATH
+		exit 1
+
+	fi
+}

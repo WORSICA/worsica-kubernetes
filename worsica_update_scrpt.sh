@@ -19,6 +19,23 @@ echo "Next version: ${WORSICA_NEXT_VERSION}"
 
 echo '------------------------------------'
 cd $CURRENT_PATH
+#make sure secrets are loaded
+echo "=====check for secret worsica-cert-robot-key ====="
+if (sudo kubectl get secrets -n worsica | grep -q worsica-cert-robot-key) ; then 
+	echo "worsica-cert-robot-key exists, proceed!"
+else 
+	echo "worsica-cert-robot-key does not exist, create!"
+	if sudo kubectl create secret tls worsica-cert-robot-key --key worsica_lnec_certs_robot.key --cert worsica_lnec_certs_robot.pem ; then
+		echo 'update worsica_grid_launch_submission.sh'
+		sed -i "s/worsica_lnec_certs_robot.pem/tls.crt/g" $CURRENT_PATH/repositories/worsica-processing/worsica_grid_launch_submission.sh
+		sed -i "s/worsica_lnec_certs_robot.key/tls.key/g" $CURRENT_PATH/repositories/worsica-processing/worsica_grid_launch_submission.sh
+	else
+		echo "failed to add secret"
+		exit 1
+	fi
+	#update worsica_grid_launch_submission.sh
+fi
+#
 if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'essentials' ]]); then
 	echo ' ==========Update worsica-essentials  =========='
 	echo '1) git pull --------------'
@@ -78,6 +95,16 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'processing' ]]); th
 	if (cd $CURRENT_PATH/repositories/worsica-processing && git pull origin $CURRENT_BRANCH); then
 		echo 'git pull success! --------------'
 		cd $CURRENT_PATH
+		echo '2) build --------------'
+		FUNC=$(declare -f build_worsica_processing) #force sudo
+		if (sudo bash -c "$FUNC; build_worsica_processing $CURRENT_PATH $WORSICA_NEXT_VERSION"); then
+			echo 'build success! --------------'
+			cd $CURRENT_PATH
+		else
+			echo 'build fail! --------------'
+			cd $CURRENT_PATH
+			exit 1
+		fi
 	else
 		echo 'git pull fail! --------------'
 		cd $CURRENT_PATH

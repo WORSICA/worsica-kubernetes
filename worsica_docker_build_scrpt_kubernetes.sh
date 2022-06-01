@@ -31,10 +31,9 @@ echo '------------------------------------'
 echo '3) Building worsica-kubernetes-intermediate'
 build_worsica_intermediate $CURRENT_PATH $WORSICA_NEXT_VERSION
 
-#not needed for now
-#echo '------------------------------------'
-#echo '4) Building worsica-kubernetes-processing'
-#build_worsica_frontend $CURRENT_PATH $WORSICA_NEXT_VERSION
+echo '------------------------------------'
+echo '4) Building worsica-kubernetes-processing'
+build_worsica_processing $CURRENT_PATH $WORSICA_NEXT_VERSION
 
 #echo '------------------------------------'
 #echo '6) Stop worsica-kubernetes-frontend docker and worsica-kubernetes-intermediate docker'
