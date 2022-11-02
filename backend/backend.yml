@@ -3,7 +3,7 @@ version: "3.5"
 services:
 
   kubernetes-intermediate:
-    image: "worsica/worsica-kubernetes-intermediate:${WORSICA_NEXT_VERSION}"
+    image: "worsica/worsica-kubernetes-intermediate:${WORSICA_INTERMEDIATE_NEXT_VERSION}"
     container_name: "kubernetes-intermediate"
     hostname: "intermediate"
     volumes:
@@ -23,7 +23,7 @@ services:
       - "8002:8002"
 
   kubernetes-frontend:
-    image: "worsica/worsica-kubernetes-frontend:${WORSICA_NEXT_VERSION}"
+    image: "worsica/worsica-kubernetes-frontend:${WORSICA_FRONTEND_NEXT_VERSION}"
     container_name: "kubernetes-frontend"
     hostname: "frontend"
     volumes:

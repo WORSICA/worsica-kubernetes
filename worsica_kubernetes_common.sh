@@ -1,7 +1,7 @@
 function build_worsica_essentials {
 	CURRENT_PATH=$1
-	WORSICA_NEXT_VERSION=$2
-	NO_CACHE=$3	
+	#WORSICA_NEXT_VERSION=$2
+	NO_CACHE=$2	
 	cd $CURRENT_PATH
 	if [[ -z $NO_CACHE ]] ; then
 		echo 'Use cache on the build'
@@ -90,7 +90,7 @@ function build_worsica_processing {
 		cd $CURRENT_PATH
 		exit 1
 	fi
-	echo 'Saving image to tar'
+	#echo 'Saving image to tar'
 	TAR_FILE=worsica-processing-dev.tar
 	NEXTCLOUD_PATH="https://worsica-nextcloud.a.incd.pt/remote.php/dav/files/worsicaAdmin"
 	if docker save -o $CURRENT_PATH/$TAR_FILE worsica/worsica-processing:development ; then
