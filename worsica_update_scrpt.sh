@@ -76,16 +76,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'frontend' ]]); then
 		FUNC=$(declare -f build_worsica_frontend) #force sudo
                 if (sudo bash -c "$FUNC; build_worsica_frontend $CURRENT_PATH $WORSICA_FRONTEND_NEXT_VERSION"); then
 			echo 'build success! --------------'
-			cd $CURRENT_PATH
-			echo 'remove old images'
-			if (ssh vnode-1 "sudo docker images -q worsica/worsica-kubernetes-frontend:* | xargs sudo docker rmi -f || true"); then
-				echo 'removed with success! --------------'
-				cd $CURRENT_PATH
-			else
-				echo 'remove fail! --------------'
-				cd $CURRENT_PATH
-				exit 1
-			fi	
+			cd $CURRENT_PATH			
 			echo 'deploying, please wait...'
 			if (sudo docker save worsica/worsica-kubernetes-frontend:$WORSICA_FRONTEND_NEXT_VERSION | ssh vnode-1 "sudo docker load"); then
 				echo 'deployment success! --------------'
@@ -95,6 +86,15 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'frontend' ]]); then
 				cd $CURRENT_PATH
 				exit 1
 			fi	
+			#echo 'remove old images'
+			#if (ssh vnode-1 "sudo docker images -q worsica/worsica-kubernetes-frontend:* | xargs sudo docker rmi -f || true"); then
+			#	echo 'removed with success! --------------'
+			#	cd $CURRENT_PATH
+			#else
+			#	echo 'remove fail! --------------'
+			#	cd $CURRENT_PATH
+			#	exit 1
+			#fi	
 		else
 			echo 'build fail! --------------'
 			cd $CURRENT_PATH
@@ -154,16 +154,7 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); 
 		FUNC=$(declare -f build_worsica_intermediate) #force sudo
                 if (sudo bash -c "$FUNC; build_worsica_intermediate $CURRENT_PATH $WORSICA_INTERMEDIATE_NEXT_VERSION"); then
 			echo 'build success! --------------'
-			cd $CURRENT_PATH
-			echo 'remove old images'
-			if (ssh vnode-2 "sudo docker images -q worsica/worsica-kubernetes-intermediate:* | xargs sudo docker rmi -f || true"); then
-				echo 'removed with success! --------------'
-				cd $CURRENT_PATH
-			else
-				echo 'remove fail! --------------'
-				cd $CURRENT_PATH
-				exit 1
-			fi	
+			cd $CURRENT_PATH	
 			echo 'deploying, please wait...'
 			if (sudo docker save worsica/worsica-kubernetes-intermediate:$WORSICA_INTERMEDIATE_NEXT_VERSION | ssh vnode-2 "sudo docker load"); then
 				echo 'deployment success! --------------'
@@ -173,6 +164,15 @@ if ([[ -z $WORSICA_COMPONENT ]] || [[ $WORSICA_COMPONENT == 'intermediate' ]]); 
 				cd $CURRENT_PATH
 				exit 1
 			fi	
+			#echo 'remove old images'
+			#if (ssh vnode-2 "sudo docker images -q worsica/worsica-kubernetes-intermediate:* | xargs sudo docker rmi -f || true"); then
+			#	echo 'removed with success! --------------'
+			#	cd $CURRENT_PATH
+			#else
+			#	echo 'remove fail! --------------'
+			#	cd $CURRENT_PATH
+			#	exit 1
+			#fi
 		else
 			echo 'build fail! --------------'
 			cd $CURRENT_PATH
